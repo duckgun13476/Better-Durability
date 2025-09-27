@@ -1,0 +1,80 @@
+package darkorg.betterdurability.common.config;
+
+import darkorg.betterdurability.common.BetterDurability;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
+import net.minecraftforge.common.ForgeConfigSpec;
+import net.minecraftforge.common.ForgeConfigSpec.ConfigValue;
+import org.apache.commons.lang3.tuple.Pair;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public abstract class BetterDurabilityConfig {
+    public static final Gameplay GAMEPLAY;
+    public static final ForgeConfigSpec GAMEPLAY_SPEC;
+    public static final String GAMEPLAY_CONFIG_FILE_NAME = BetterDurability.MOD_ID + "-gameplay.toml";
+
+    static {
+        final Pair<Gameplay, ForgeConfigSpec> specPair = new ForgeConfigSpec.Builder().configure(Gameplay::new);
+        GAMEPLAY = specPair.getLeft();
+        GAMEPLAY_SPEC = specPair.getRight();
+    }
+
+    public static class Gameplay {
+        public final ConfigValue<Double> defaultItemDestroySpeed;
+        public final ConfigValue<Double> defaultItemBrokenDestroySpeed;
+        public final ConfigValue<String> blacklist;
+
+        Gameplay(ForgeConfigSpec.Builder pBuilder) {
+            pBuilder.comment("Settings related to gameplay").push("gameplay");
+
+            defaultItemDestroySpeed = pBuilder
+                    .comment("Change default vanilla item destroy speed")
+                    .comment("This value should always be higher than 'defaultBrokenSpeed'")
+                    .defineInRange("defaultItemDestroySpeed", 1.0F, 1.0F, Double.MAX_VALUE);
+
+            defaultItemBrokenDestroySpeed = pBuilder
+                    .comment("Change default broken item destroy speed.")
+                    .comment("This value should always be equal or lower than 'defaultDestroySpeed'")
+                    .comment("Setting this value to 0.0, will essentially make broken tools not able to break a block")
+                    .comment("If value is > 0.0, then broken items will still be able to break a block")
+                    .comment("Note: Regardless of this value, broken items will never be able to 'harvest' a block, if the block requires the correct tool to drop.")
+                    .comment("Example: Broken pickaxe will not drop stone, even if it can break the stone")
+                    .defineInRange("defaultItemBrokenDestroySpeed", 1.0F, 0.0F, Double.MAX_VALUE);
+
+            blacklist = pBuilder
+                    .comment("Items in this list will follow vanilla durability logic")
+                    .define("blacklist", "minecraft:carrot_on_a_stick, minecraft:warped_fungus_on_a_stick");
+            pBuilder.pop();
+        }
+    }
+
+    private static List<Item> blacklist;
+
+    public static boolean isBlacklisted(Item pItem) {
+        if (BetterDurabilityConfig.blacklist == null) {
+            BetterDurabilityConfig.blacklist = BetterDurabilityConfig.parseItemListConfig(BetterDurabilityConfig.GAMEPLAY.blacklist);
+        }
+        return BetterDurabilityConfig.blacklist.contains(pItem);
+    }
+
+    public static List<Item> parseItemListConfig(ConfigValue<String> pConfigList) {
+        List<Item> items = new ArrayList<>();
+        //Strip all white-spaces from the config value
+        String config = pConfigList.get().replaceAll("\\s+", "");
+        if (!config.isEmpty()) {
+            if (config.matches("^(\\w+:\\w+,)*(\\w+:\\w+)$")) {
+                String[] split = config.split(",");
+                for (String entry : split) {
+                    String[] splitEntry = entry.strip().split(":");
+                    items.add(BuiltInRegistries.ITEM.get(new ResourceLocation(splitEntry[0], splitEntry[1])));
+                }
+            } else {
+                BetterDurability.LOGGER.error("Malformed [blacklist] config value! Cannot parse: [{}]", config);
+            }
+        }
+        return items;
+    }
+}
