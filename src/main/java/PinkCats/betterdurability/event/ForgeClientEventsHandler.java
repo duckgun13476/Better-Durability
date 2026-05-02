@@ -1,17 +1,17 @@
-package darkorg.betterdurability.event;
+package PinkCats.betterdurability.event;
 
-import darkorg.betterdurability.BetterDurability;
-import darkorg.betterdurability.util.VanillaDamageableType;
+import PinkCats.betterdurability.BetterDurability;
+import PinkCats.betterdurability.util.VanillaDamageableType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.event.entity.player.ItemTooltipEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.api.distmarker.Dist;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.ItemTooltipEvent;
 
 import java.util.List;
 
-@Mod.EventBusSubscriber(modid = BetterDurability.MOD_ID, value = Dist.CLIENT)
+@EventBusSubscriber(modid = BetterDurability.MOD_ID, value = Dist.CLIENT)
 public class ForgeClientEventsHandler {
     @SubscribeEvent
     public static void onItemTooltip(ItemTooltipEvent event) {

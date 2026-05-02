@@ -1,38 +1,38 @@
-package darkorg.betterdurability.setup;
+package PinkCats.betterdurability.setup;
 
 import com.google.common.collect.ImmutableList;
-import darkorg.betterdurability.BetterDurability;
-import darkorg.betterdurability.util.VanillaDamageableType;
+import PinkCats.betterdurability.BetterDurability;
+import PinkCats.betterdurability.util.VanillaDamageableType;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.Items;
-import net.minecraftforge.common.ForgeConfigSpec;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
-import net.minecraftforge.fml.event.config.ModConfigEvent;
-import net.minecraftforge.registries.ForgeRegistries;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.fml.event.config.ModConfigEvent;
+import net.neoforged.neoforge.common.ModConfigSpec;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
 
-@Mod.EventBusSubscriber(modid = BetterDurability.MOD_ID, bus = Mod.EventBusSubscriber.Bus.MOD)
+@EventBusSubscriber(modid = BetterDurability.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class ConfigurationHandler {
-    public static ForgeConfigSpec SERVER_CONFIG;
+    public static ModConfigSpec SERVER_CONFIG;
 
     public static final String CATEGORY_BLACKLISTS = "blacklists";
-    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DISABLED_CATEGORY_NAMES;
+    public static final ModConfigSpec.ConfigValue<List<? extends String>> DISABLED_CATEGORY_NAMES;
     public static final Set<VanillaDamageableType.Category> DISABLED_CATEGORIES = new HashSet<>();
-    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> DISABLED_TYPE_NAMES;
+    public static final ModConfigSpec.ConfigValue<List<? extends String>> DISABLED_TYPE_NAMES;
     public static final Set<VanillaDamageableType> DISABLED_TYPES = new HashSet<>();
-    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> BLACKLISTED_ITEM_IDS;
-    public static final ForgeConfigSpec.ConfigValue<List<? extends String>> WHITELISTED_ITEM_IDS;
+    public static final ModConfigSpec.ConfigValue<List<? extends String>> BLACKLISTED_ITEM_IDS;
+    public static final ModConfigSpec.ConfigValue<List<? extends String>> WHITELISTED_ITEM_IDS;
     public static final Set<Item> BLACKLISTED_ITEMS = new HashSet<>();
     public static final Set<Item> WHITELISTED_ITEMS = new HashSet<>();
 
     static {
-        ForgeConfigSpec.Builder SERVER_BUILDER = new ForgeConfigSpec.Builder();
+        ModConfigSpec.Builder SERVER_BUILDER = new ModConfigSpec.Builder();
 
         SERVER_BUILDER.comment("Blacklist things, loved by server owners ;)").push(CATEGORY_BLACKLISTS);
         DISABLED_CATEGORY_NAMES = SERVER_BUILDER.comment("List of disabled damage protection categories. Available: TOOL, ARMOR, SHIELD.")
@@ -78,8 +78,8 @@ public class ConfigurationHandler {
                 continue;
             }
 
-            Item item = ForgeRegistries.ITEMS.getValue(itemLocation);
-            if (item == null || item == Items.AIR) {
+            Item item = BuiltInRegistries.ITEM.get(itemLocation);
+            if (item == Items.AIR) {
                 BetterDurability.LOGGER.error("Trying to blacklist item {} but it does not exist ...", itemId);
             } else {
                 dst.add(item);

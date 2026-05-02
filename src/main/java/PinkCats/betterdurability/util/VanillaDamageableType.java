@@ -1,12 +1,12 @@
-package darkorg.betterdurability.util;
+package PinkCats.betterdurability.util;
 
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.*;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.Arrays;
 
-import static darkorg.betterdurability.event.DurabilityEventsHandler.isWhitelisted;
+import static PinkCats.betterdurability.event.DurabilityEventsHandler.isWhitelisted;
 
 public enum VanillaDamageableType {
     // brokenThreshold and protectValue here is somewhat arbitrary
@@ -78,25 +78,25 @@ public enum VanillaDamageableType {
     },
     HELMET(Category.ARMOR, 2, 1) {
         public boolean isItemThisType(Item item) {
-            return item instanceof ArmorItem armorItem && armorItem.getEquipmentSlot() == EquipmentSlot.HEAD;
+            return item instanceof ArmorItem armorItem && armorItem.getType().getSlot() == EquipmentSlot.HEAD;
         }
     },
     CHESTPLATE(Category.ARMOR, 2, 1) {
         @Override
         public boolean isItemThisType(Item item) {
-            return item instanceof ArmorItem armorItem && armorItem.getEquipmentSlot() == EquipmentSlot.CHEST;
+            return item instanceof ArmorItem armorItem && armorItem.getType().getSlot() == EquipmentSlot.CHEST;
         }
     },
     LEGGINGS(Category.ARMOR, 2, 1) {
         @Override
         public boolean isItemThisType(Item item) {
-            return item instanceof ArmorItem armorItem && armorItem.getEquipmentSlot() == EquipmentSlot.LEGS;
+            return item instanceof ArmorItem armorItem && armorItem.getType().getSlot() == EquipmentSlot.LEGS;
         }
     },
     BOOTS(Category.ARMOR, 2, 1) {
         @Override
         public boolean isItemThisType(Item item) {
-            return item instanceof ArmorItem armorItem && armorItem.getEquipmentSlot() == EquipmentSlot.FEET;
+            return item instanceof ArmorItem armorItem && armorItem.getType().getSlot() == EquipmentSlot.FEET;
         }
     },
     SHIELD(Category.SHIELD, 4, 2) {

@@ -1,15 +1,15 @@
-package darkorg.betterdurability.event;
+package PinkCats.betterdurability.event;
 
-import darkorg.betterdurability.BetterDurability;
-import darkorg.betterdurability.util.VanillaDamageableType;
+import PinkCats.betterdurability.BetterDurability;
+import PinkCats.betterdurability.util.VanillaDamageableType;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.event.entity.player.AttackEntityEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
-import net.minecraftforge.event.entity.player.PlayerInteractEvent;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerEvent;
+import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
 
-@Mod.EventBusSubscriber(modid = BetterDurability.MOD_ID)
+@EventBusSubscriber(modid = BetterDurability.MOD_ID)
 public class ForgeEventsHandler {
     @SubscribeEvent
     public static void onLeftClickBlock(PlayerEvent.BreakSpeed event) {

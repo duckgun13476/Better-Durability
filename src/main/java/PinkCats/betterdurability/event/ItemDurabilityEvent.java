@@ -1,9 +1,9 @@
-package darkorg.betterdurability.event;
+package PinkCats.betterdurability.event;
 
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
-import net.minecraftforge.eventbus.api.Cancelable;
-import net.minecraftforge.eventbus.api.Event;
+import net.neoforged.bus.api.Event;
+import net.neoforged.bus.api.ICancellableEvent;
+import net.neoforged.neoforge.common.NeoForge;
 
 /**
  * These events are triggered in various points where durability is involved.
@@ -53,8 +53,7 @@ public class ItemDurabilityEvent extends Event {
      * <p>
      * Another note: this event is not guaranteed to be triggered before or after {@link ItemBreaking}.
      */
-    @Cancelable
-    public static class ItemUsage extends ItemDurabilityEvent {
+    public static class ItemUsage extends ItemDurabilityEvent implements ICancellableEvent {
         /**
          * Various types of effects item can make. Note that these types are decided by implementation, every injection
          * point maps to a type here.
@@ -84,7 +83,7 @@ public class ItemDurabilityEvent extends Event {
          * Shorthand for checking if an item can function.
          */
         public static boolean check(ItemStack targetStack, Type type) {
-            return !MinecraftForge.EVENT_BUS.post(new ItemUsage(targetStack, type));
+            return !NeoForge.EVENT_BUS.post(new ItemUsage(targetStack, type)).isCanceled();
         }
     }
 }

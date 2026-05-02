@@ -1,10 +1,10 @@
-package darkorg.betterdurability.mixin.vanilla;
+package PinkCats.betterdurability.mixin;
 
-import darkorg.betterdurability.event.ItemDurabilityEvent.ItemBreaking;
+import PinkCats.betterdurability.event.ItemDurabilityEvent.ItemBreaking;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.common.MinecraftForge;
+import net.neoforged.neoforge.common.NeoForge;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,7 +27,7 @@ public abstract class ItemStackMixin {
         int maxDamageValue = this.getMaxDamage();
         if (newDamageValue >= maxDamageValue) {
             ItemBreaking event = new ItemBreaking((ItemStack)(Object)this, pAmount);
-            MinecraftForge.EVENT_BUS.post(event);
+            NeoForge.EVENT_BUS.post(event);
             if (event.reserveDurability > 0) {
                 this.setDamageValue(maxDamageValue - event.reserveDurability);
                 cir.setReturnValue(false);

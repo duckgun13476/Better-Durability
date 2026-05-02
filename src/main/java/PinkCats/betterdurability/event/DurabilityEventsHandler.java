@@ -1,17 +1,17 @@
-package darkorg.betterdurability.event;
+package PinkCats.betterdurability.event;
 
 
-import darkorg.betterdurability.BetterDurability;
-import darkorg.betterdurability.setup.ConfigurationHandler;
-import darkorg.betterdurability.util.VanillaDamageableType;
+import PinkCats.betterdurability.BetterDurability;
+import PinkCats.betterdurability.setup.ConfigurationHandler;
+import PinkCats.betterdurability.util.VanillaDamageableType;
 import net.minecraft.world.item.Item;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fml.common.Mod;
+import net.neoforged.bus.api.SubscribeEvent;
+import net.neoforged.fml.common.EventBusSubscriber;
 
 /**
  * Core logic is here.
  */
-@Mod.EventBusSubscriber(modid = BetterDurability.MOD_ID)
+@EventBusSubscriber(modid = BetterDurability.MOD_ID)
 public class DurabilityEventsHandler {
     public static boolean isBlacklisted(Item targetItem, VanillaDamageableType itemType) {
         return ConfigurationHandler.DISABLED_CATEGORIES.contains(itemType.category)

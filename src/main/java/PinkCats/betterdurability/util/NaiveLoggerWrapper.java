@@ -1,4 +1,4 @@
-package darkorg.betterdurability.util;
+package PinkCats.betterdurability.util;
 
 import org.apache.logging.log4j.Logger;
 

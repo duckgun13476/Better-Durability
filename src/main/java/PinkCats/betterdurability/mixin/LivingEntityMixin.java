@@ -1,7 +1,7 @@
-package darkorg.betterdurability.mixin.vanilla;
+package PinkCats.betterdurability.mixin;
 
-import darkorg.betterdurability.event.ItemDurabilityEvent.ItemUsage;
-import darkorg.betterdurability.util.VanillaDamageableType;
+import PinkCats.betterdurability.event.ItemDurabilityEvent.ItemUsage;
+import PinkCats.betterdurability.util.VanillaDamageableType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
