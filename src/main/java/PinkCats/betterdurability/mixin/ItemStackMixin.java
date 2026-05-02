@@ -1,6 +1,5 @@
 package PinkCats.betterdurability.mixin;
 
-import PinkCats.betterdurability.BetterDurability;
 import PinkCats.betterdurability.event.ItemDurabilityEvent.ItemBreaking;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerLevel;
@@ -33,18 +32,12 @@ public abstract class ItemStackMixin {
                                              CallbackInfo ci, int newDamageValue) {
         int maxDamageValue = this.getMaxDamage();
         ItemStack self = (ItemStack)(Object)this;
-        BetterDurability.LOGGER.info("hurtAndBreak path: item={}, oldDamage={}, incomingDamage={}, newDamage={}, maxDamage={}, entity={}",
-                self.getItem(), this.getDamageValue(), damage, newDamageValue, maxDamageValue,
-                entity == null ? "null" : entity.getType());
 
         if (newDamageValue >= maxDamageValue) {
             ItemBreaking event = new ItemBreaking(self, damage);
             NeoForge.EVENT_BUS.post(event);
-            BetterDurability.LOGGER.info("hurtAndBreak break check: item={}, reserveDurability={}", self.getItem(), event.reserveDurability);
             if (event.reserveDurability > 0) {
                 this.setDamageValue(maxDamageValue - event.reserveDurability);
-                BetterDurability.LOGGER.info("hurtAndBreak protected: item={}, finalDamage={}, durabilityLeft={}",
-                        self.getItem(), this.getDamageValue(), event.reserveDurability);
                 ci.cancel();
             }
         }
@@ -59,13 +52,8 @@ public abstract class ItemStackMixin {
         if (newDamageValue >= maxDamageValue) {
             ItemBreaking event = new ItemBreaking((ItemStack)(Object)this, pAmount);
             NeoForge.EVENT_BUS.post(event);
-            BetterDurability.LOGGER.info("hurt path break check: item={}, oldDamage={}, incomingDamage={}, newDamage={}, maxDamage={}, reserveDurability={}, player={}",
-                    ((ItemStack)(Object)this).getItem(), this.getDamageValue(), pAmount, newDamageValue, maxDamageValue,
-                    event.reserveDurability, pUser == null ? "null" : pUser.getGameProfile().getName());
             if (event.reserveDurability > 0) {
                 this.setDamageValue(maxDamageValue - event.reserveDurability);
-                BetterDurability.LOGGER.info("hurt path protected: item={}, finalDamage={}, durabilityLeft={}",
-                        ((ItemStack)(Object)this).getItem(), this.getDamageValue(), event.reserveDurability);
                 cir.setReturnValue(false);
             } else {
                 this.setDamageValue(newDamageValue);
