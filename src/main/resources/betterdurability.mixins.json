@@ -2,6 +2,7 @@
   "compatibilityLevel": "JAVA_21",
   "package": "PinkCats.betterdurability.mixin",
   "mixins": [
+    "EnchantmentMixin",
     "ItemStackMixin",
     "LivingEntityMixin"
   ],
