@@ -40,13 +40,13 @@ public class ConfigurationHandler {
         DISABLED_TYPE_NAMES = SERVER_BUILDER.comment("List of disabled damage protection types. Available: AXE, PICKAXE, SHOVEL, HOE, SHEARS, SWORD, FISHING_ROD, FLINT_AND_STEEL, BOW, TRIDENT, CROSSBOW, HELMET, CHESTPLATE, LEGGINGS, BOOTS, SHIELD.")
                 .defineList("disabledTypeNames", ImmutableList.of(), obj -> true);
         BLACKLISTED_ITEM_IDS = SERVER_BUILDER.comment("List of blacklisted items. Format is modId:itemId, modId can be omitted for vanilla.")
-                .defineList("blacklistedItemIds", ImmutableList.of(), ConfigurationHandler::isNonBlankString);
+                .defineList("blacklistedItemIds", ImmutableList.of(), obj -> true);
         WHITELISTED_ITEM_IDS = SERVER_BUILDER
                 .comment("EXPERIMENTAL: Whitelist is intended for items whose types are not included above, such as knives from Farmer's Delight. ")
                 .comment("Items here will be forcefully protected as long as they are not blacklisted. Their durability will be set to 2 when being about to break.")
                 .comment("However, since only the click event is canceled, some illogical situations may occur.")
                 .comment("Format is modId:itemId, modId can be omitted for vanilla.")
-                .defineList("whitelistedItemIds", ImmutableList.of(), ConfigurationHandler::isNonBlankString);
+                .defineList("whitelistedItemIds", ImmutableList.of(), obj -> true);
         SERVER_BUILDER.pop();
 
         SERVER_CONFIG = SERVER_BUILDER.build();
@@ -72,10 +72,6 @@ public class ConfigurationHandler {
 
     private static void loadItemIdList(final List<? extends String> src, final Set<Item> dst) {
         for (String itemId : src) {
-            if (itemId == null || itemId.isBlank()) {
-                continue;
-            }
-            itemId = itemId.trim();
             ResourceLocation itemLocation = ResourceLocation.tryParse(itemId);
             if (itemLocation == null) {
                 BetterDurability.LOGGER.error("Invalid ResourceLocation format for item {}", itemId);
@@ -90,11 +86,6 @@ public class ConfigurationHandler {
             }
         }
     }
-
-    private static boolean isNonBlankString(Object obj) {
-        return obj instanceof String value && !value.isBlank();
-    }
-
     private static void reloadItemIdList(final List<? extends String> src, final Set<Item> dst) {
         dst.clear();
         loadItemIdList(src, dst);
