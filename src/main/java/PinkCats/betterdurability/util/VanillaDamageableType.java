@@ -120,6 +120,9 @@ public enum VanillaDamageableType {
     }
 
     public boolean isItemBroken(ItemStack stack) {
+        if (!stack.isDamageableItem()) {
+            return false;
+        }
         int durabilityLeft = stack.getMaxDamage() - stack.getDamageValue();
         return durabilityLeft <= this.brokenThreshold;
     }
