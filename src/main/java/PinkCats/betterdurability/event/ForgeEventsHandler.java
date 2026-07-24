@@ -1,10 +1,10 @@
 package PinkCats.betterdurability.event;
 
 import PinkCats.betterdurability.BetterDurability;
-import PinkCats.betterdurability.util.VanillaDamageableType;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.common.util.TriState;
 import net.neoforged.neoforge.event.entity.player.AttackEntityEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerEvent;
 import net.neoforged.neoforge.event.entity.player.PlayerInteractEvent;
@@ -42,7 +42,12 @@ public class ForgeEventsHandler {
         ItemStack targetStack = event.getItemStack();
         if (!targetStack.isDamageableItem()) return;
         if (!DurabilityEventsHandler.canUseTool(targetStack,
-                ItemDurabilityEvent.ItemUsage.Type.TOOL_RIGHT_CLICK_BLOCK)) { event.setCanceled(true); }
+                ItemDurabilityEvent.ItemUsage.Type.TOOL_RIGHT_CLICK_BLOCK)) {
+            // Do not cancel the whole interaction: that also prevents the
+            // target block from opening its menu. A broken tool cannot be
+            // used, while the block keeps its normal right-click behavior.
+            event.setUseItem(TriState.FALSE);
+        }
     }
 
     @SubscribeEvent
