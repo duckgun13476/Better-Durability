@@ -8,6 +8,7 @@ import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Coerce;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
@@ -29,7 +30,7 @@ public class CreateDeployerHandlerMixin {
         Vec3 position,
         BlockPos targetPos,
         Vec3 movement,
-        Object mode,
+        @Coerce Object mode,
         CallbackInfo ci
     ) {
         // Mode is package-private in Create. The broken-tool policy itself is
