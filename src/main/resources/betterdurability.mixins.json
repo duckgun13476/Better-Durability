@@ -4,7 +4,9 @@
   "mixins": [
     "EnchantmentMixin",
     "ItemStackMixin",
-    "LivingEntityMixin"
+    "LivingEntityMixin",
+    "compat.create.CreateBeltDeployerCallbacksMixin",
+    "compat.create.CreateDeployerHandlerMixin"
   ],
   "client": [],
   "server": []

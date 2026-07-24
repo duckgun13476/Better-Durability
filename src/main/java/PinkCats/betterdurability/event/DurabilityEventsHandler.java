@@ -2,6 +2,7 @@ package PinkCats.betterdurability.event;
 
 
 import PinkCats.betterdurability.BetterDurability;
+import PinkCats.betterdurability.event.ItemDurabilityEvent.ItemUsage;
 import PinkCats.betterdurability.setup.ConfigurationHandler;
 import PinkCats.betterdurability.util.VanillaDamageableType;
 import net.minecraft.world.item.Item;
@@ -25,6 +26,15 @@ public class DurabilityEventsHandler {
     public static boolean isWhitelisted(Item targetItem) {
         return ConfigurationHandler.WHITELISTED_ITEMS.contains(targetItem)
             && !ConfigurationHandler.BLACKLISTED_ITEMS.contains(targetItem);
+    }
+
+    /**
+     * Applies the same broken-tool policy to automation entry points that do not
+     * produce NeoForge player interaction events, such as Create deployers.
+     */
+    public static boolean canUseTool(ItemStack targetStack, ItemUsage.Type usageType) {
+        return ItemUsage.check(targetStack, usageType)
+            && !VanillaDamageableType.isItemKnownBrokenAnother(targetStack);
     }
 
     @SubscribeEvent
