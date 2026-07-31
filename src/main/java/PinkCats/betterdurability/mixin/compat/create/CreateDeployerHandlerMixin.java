@@ -1,6 +1,6 @@
 package PinkCats.betterdurability.mixin.compat.create;
 
-import PinkCats.betterdurability.event.DurabilityEventsHandler;
+import PinkCats.betterdurability.durability.DurabilityPolicy;
 import PinkCats.betterdurability.event.ItemDurabilityEvent.ItemUsage;
 import com.simibubi.create.content.kinetics.deployer.DeployerFakePlayer;
 import net.minecraft.core.BlockPos;
@@ -35,7 +35,7 @@ public class CreateDeployerHandlerMixin {
     ) {
         // Mode is package-private in Create. The broken-tool policy itself is
         // independent of the action type, so use the public right-click slot.
-        if (!DurabilityEventsHandler.canUseTool(
+        if (!DurabilityPolicy.canUseTool(
             player.getMainHandItem(),
             ItemUsage.Type.TOOL_RIGHT_CLICK_BLOCK
         )) {

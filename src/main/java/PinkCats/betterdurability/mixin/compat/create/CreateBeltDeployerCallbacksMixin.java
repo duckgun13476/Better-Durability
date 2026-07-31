@@ -1,6 +1,6 @@
 package PinkCats.betterdurability.mixin.compat.create;
 
-import PinkCats.betterdurability.event.DurabilityEventsHandler;
+import PinkCats.betterdurability.durability.DurabilityPolicy;
 import PinkCats.betterdurability.event.ItemDurabilityEvent.ItemUsage;
 import com.simibubi.create.content.kinetics.belt.behaviour.TransportedItemStackHandlerBehaviour;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
@@ -28,7 +28,7 @@ public class CreateBeltDeployerCallbacksMixin {
         CallbackInfo ci
     ) {
         var player = blockEntity.getPlayer();
-        if (player == null || !DurabilityEventsHandler.canUseTool(
+        if (player == null || !DurabilityPolicy.canUseTool(
             player.getMainHandItem(),
             ItemUsage.Type.TOOL_RIGHT_CLICK_BLOCK
         )) {

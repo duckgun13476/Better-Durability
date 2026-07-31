@@ -1,6 +1,7 @@
 package PinkCats.betterdurability.event;
 
 import PinkCats.betterdurability.BetterDurability;
+import PinkCats.betterdurability.durability.DurabilityPolicy;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
@@ -16,7 +17,7 @@ public class ForgeEventsHandler {
         if (event.getState().getBlock().getSpeedFactor() != 0.0F) {
         ItemStack targetStack = event.getEntity().getMainHandItem();
         if (!targetStack.isDamageableItem()) return;
-        if (!DurabilityEventsHandler.canUseTool(targetStack,
+        if (!DurabilityPolicy.canUseTool(targetStack,
                 ItemDurabilityEvent.ItemUsage.Type.TOOL_LEFT_CLICK_BLOCK)) { event.setCanceled(true); }
         }
     }
@@ -25,7 +26,7 @@ public class ForgeEventsHandler {
     public static void onLeftClickEntity(AttackEntityEvent event) {
         ItemStack targetStack = event.getEntity().getMainHandItem();
         if (!targetStack.isDamageableItem()) return;
-        if (!DurabilityEventsHandler.canUseTool(targetStack,
+        if (!DurabilityPolicy.canUseTool(targetStack,
                 ItemDurabilityEvent.ItemUsage.Type.TOOL_LEFT_CLICK_ENTITY)) { event.setCanceled(true); }
     }
 
@@ -33,7 +34,7 @@ public class ForgeEventsHandler {
     public static void onRightClickItem(PlayerInteractEvent.RightClickItem event) {
         ItemStack targetStack = event.getItemStack();
         if (!targetStack.isDamageableItem()) return;
-        if (!DurabilityEventsHandler.canUseTool(targetStack,
+        if (!DurabilityPolicy.canUseTool(targetStack,
                 ItemDurabilityEvent.ItemUsage.Type.TOOL_RIGHT_CLICK_ITEM)) { event.setCanceled(true); }
     }
 
@@ -41,7 +42,7 @@ public class ForgeEventsHandler {
     public static void onRightClickBlock(PlayerInteractEvent.RightClickBlock event) {
         ItemStack targetStack = event.getItemStack();
         if (!targetStack.isDamageableItem()) return;
-        if (!DurabilityEventsHandler.canUseTool(targetStack,
+        if (!DurabilityPolicy.canUseTool(targetStack,
                 ItemDurabilityEvent.ItemUsage.Type.TOOL_RIGHT_CLICK_BLOCK)) {
             // Do not cancel the whole interaction: that also prevents the
             // target block from opening its menu. A broken tool cannot be
@@ -54,7 +55,7 @@ public class ForgeEventsHandler {
     public static void onRightClickEntity(PlayerInteractEvent.EntityInteract event) {
         ItemStack targetStack = event.getItemStack();
         if (!targetStack.isDamageableItem()) return;
-        if (!DurabilityEventsHandler.canUseTool(targetStack,
+        if (!DurabilityPolicy.canUseTool(targetStack,
                 ItemDurabilityEvent.ItemUsage.Type.TOOL_RIGHT_CLICK_ENTITY)) { event.setCanceled(true); }
     }
 
@@ -62,7 +63,7 @@ public class ForgeEventsHandler {
     public static void onRightClickEntitySpecific(PlayerInteractEvent.EntityInteractSpecific event) {
         ItemStack targetStack = event.getItemStack();
         if (!targetStack.isDamageableItem()) return;
-        if (!DurabilityEventsHandler.canUseTool(targetStack,
+        if (!DurabilityPolicy.canUseTool(targetStack,
                 ItemDurabilityEvent.ItemUsage.Type.TOOL_RIGHT_CLICK_ENTITY)) { event.setCanceled(true); }
     }
 }

@@ -1,10 +1,10 @@
-# Better Durability
+# BetterDurabilityCommunity
 
 * A mod to prevent your precious tools from breaking!
 
 ## Notice
 
-* This mod is for **Forge** only.
+* This mod targets **NeoForge 1.21.1**.
 
 ## What does this mod do?
 
@@ -18,7 +18,7 @@
   - For **Shields**: you can use them to block, but arrow (and other projectiles) will still hurt you as if you never
     blocked.
 * This mod does not attach tag data to items to mark "Broken".
-* Currently, this mod only injects on forge events and vanilla code, so there is possibility that a certain mod can
+* Currently, this mod only injects on NeoForge events and vanilla code, so there is possibility that a certain mod can
   still cause tools to break.
 
 ![](https://i.ibb.co/7YgFSf4/better-durability.png)

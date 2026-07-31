@@ -16,7 +16,8 @@ public class ForgeClientEventsHandler {
     @SubscribeEvent
     public static void onItemTooltip(ItemTooltipEvent event) {
         List<Component> tooltip = event.getToolTip();
-        if (VanillaDamageableType.isItemKnownBroken(event.getItemStack()) || VanillaDamageableType.isItemKnownBrokenAnother(event.getItemStack()) ) {
+        if (VanillaDamageableType.isItemKnownBroken(event.getItemStack())
+                || VanillaDamageableType.isWhitelistedItemKnownBroken(event.getItemStack())) {
             tooltip.add(0, Component.translatable("tooltip.betterdurability.broken").withStyle(ChatFormatting.RED));
         }
     }

@@ -6,7 +6,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Arrays;
 
-import static PinkCats.betterdurability.event.DurabilityEventsHandler.isWhitelisted;
+import static PinkCats.betterdurability.durability.DurabilityPolicy.isWhitelisted;
 
 public enum VanillaDamageableType {
     // brokenThreshold and protectValue here is somewhat arbitrary
@@ -144,7 +144,7 @@ public enum VanillaDamageableType {
         return false;
     }
 
-    public static boolean isItemKnownBrokenAnother (ItemStack stack) {
+    public static boolean isWhitelistedItemKnownBroken(ItemStack stack) {
         if (stack.isDamageableItem()) {
             int durabilityLeft = stack.getMaxDamage() - stack.getDamageValue();
             return isWhitelisted(stack.getItem()) && durabilityLeft <= 2;
