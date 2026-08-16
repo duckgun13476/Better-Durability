@@ -10,3 +10,4 @@
 6. Replace the legacy Reforged logo text with Community and register the bundled image as the NeoForge mod-list icon.
 7. Reorganize the repository into separate Forge 1.20.1 and NeoForge 1.21.1 version projects with root aggregate build tasks.
 8. Add the BDC two-version CurseForge, Modrinth, and soft-failure Discord publication workflow.
+9. Merge the upstream 1.20.1 Common and Forge durability implementation into the active Forge source set while retaining the BDC combined build layout.

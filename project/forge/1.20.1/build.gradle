@@ -47,7 +47,7 @@ minecraft {
 
 mixin {
     add sourceSets.main, "${mod_id}.refmap.json"
-    config "${mod_id}.mixins.json"
+    config "${mod_id}.common.mixins.json"
 }
 
 sourceSets.main.resources { srcDir 'src/generated/resources' }
@@ -57,7 +57,7 @@ dependencies {
 }
 
 tasks.named('jar', Jar).configure {
-    manifest { attributes(['MixinConfigs': "${mod_id}.mixins.json"]) }
+    manifest { attributes(['MixinConfigs': "${mod_id}.common.mixins.json"]) }
     finalizedBy 'reobfJar'
 }
 tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }
