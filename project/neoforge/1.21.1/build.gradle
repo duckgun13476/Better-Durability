@@ -1,0 +1,70 @@
+plugins {
+    id 'java-library'
+    id 'maven-publish'
+    id 'idea'
+    id 'net.neoforged.moddev' version '2.0.141'
+}
+
+apply from: rootProject.file('gradle/load-version-properties.gradle')
+
+version = mod_version
+group = mod_group_id
+
+base { archivesName = mod_id }
+java.toolchain.languageVersion = JavaLanguageVersion.of(21)
+
+neoForge {
+    version = neo_version
+    parchment {
+        mappingsVersion = parchment_mappings_version
+        minecraftVersion = parchment_minecraft_version
+    }
+    runs {
+        client { client() }
+        server {
+            server()
+            programArgument '--nogui'
+        }
+    }
+    mods {
+        "${mod_id}" { sourceSet(sourceSets.main) }
+    }
+}
+
+repositories {
+    maven { url = 'https://maven.createmod.net' }
+}
+
+dependencies {
+    compileOnly('com.simibubi.create:create-1.21.1:6.0.10-281:slim')
+    compileOnly('net.createmod.ponder:ponder-neoforge:1.0.81+mc1.21.1')
+}
+
+sourceSets.main.resources { srcDir 'src/generated/resources' }
+
+def generateModMetadata = tasks.register('generateModMetadata', ProcessResources) {
+    def replaceProperties = [
+            minecraft_version: minecraft_version, minecraft_version_range: minecraft_version_range,
+            neo_version: neo_version, neo_version_range: neo_version_range,
+            loader_version_range: loader_version_range, mod_id: mod_id, mod_name: mod_name,
+            mod_license: mod_license, mod_version: mod_version, mod_authors: mod_authors,
+            mod_description: mod_description
+    ]
+    inputs.properties replaceProperties
+    expand replaceProperties
+    from 'src/main/templates'
+    into 'build/generated/sources/modMetadata'
+}
+
+sourceSets.main.resources.srcDir generateModMetadata
+neoForge.ideSyncTask generateModMetadata
+tasks.named('processResources', ProcessResources).configure {
+    exclude 'META-INF/neoforge.mods.toml'
+}
+
+publishing {
+    publications { register('mavenJava', MavenPublication) { from components.java } }
+    repositories { maven { url "file://${project.projectDir}/repo" } }
+}
+
+tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }

@@ -7,3 +7,5 @@
 3. Extract shared blacklist, whitelist, and broken-tool usability decisions into `DurabilityPolicy`.
 4. Route player interaction and Create Deployer compatibility bridges through the same durability policy, preserving existing broken-tool and non-damageable-armor behavior.
 5. Update project documentation to describe the NeoForge 1.21.1 target.
+6. Replace the legacy Reforged logo text with Community and register the bundled image as the NeoForge mod-list icon.
+7. Reorganize the repository into separate Forge 1.20.1 and NeoForge 1.21.1 version projects with root aggregate build tasks.

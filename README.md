@@ -4,7 +4,7 @@
 
 ## Notice
 
-* This mod targets **NeoForge 1.21.1**.
+* This project currently provides builds for **Forge 1.20.1** and **NeoForge 1.21.1**.
 
 ## What does this mod do?
 
