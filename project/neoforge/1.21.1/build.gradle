@@ -61,7 +61,7 @@ def generateModMetadata = tasks.register('generateModMetadata', ProcessResources
 sourceSets.main.resources.srcDir generateModMetadata
 neoForge.ideSyncTask generateModMetadata
 tasks.named('processResources', ProcessResources).configure {
-    exclude 'META-INF/neoforge.mods.toml'
+    dependsOn generateModMetadata
 }
 
 publishing {
