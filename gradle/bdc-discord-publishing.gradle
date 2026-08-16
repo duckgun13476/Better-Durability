@@ -1,0 +1,52 @@
+import java.nio.charset.StandardCharsets
+import java.security.MessageDigest
+
+// Platform publication is authoritative. A Discord outage is intentionally a
+// warning only, so it cannot turn completed uploads into a failed release.
+ext.bdcDiscordLatestChangelog = { String text ->
+    def matcher = (text ?: '') =~ /(?ms)\A(#{1,4}\s+[^\r\n]+.*?)(?=\r?\n#{1,4}\s+[^\r\n]+|\z)/
+    matcher.find() ? matcher.group(1).trim() : ''
+}
+ext.bdcDiscordSha256 = { String text ->
+    MessageDigest.getInstance('SHA-256').digest((text ?: '').getBytes(StandardCharsets.UTF_8)).collect { String.format('%02x', it & 0xff) }.join('')
+}
+
+tasks.register('publishDiscordRelease') {
+    group = 'Publishing'
+    description = 'Sends the newest changelog section to the BDC Discord release target after platform publication.'
+    dependsOn 'packageAllVersions'
+    doLast {
+        try {
+            File changelog = rootProject.file('update/changelog.md')
+            String message = changelog.isFile() ? bdcDiscordLatestChangelog(changelog.getText('UTF-8')) : ''
+            if (!message) {
+                logger.warn('[BDC Publish] Discord notification skipped: no changelog section is available.')
+                return
+            }
+            File discordProject = new File(project.findProperty('bdc_discord_project_dir')?.toString()?.trim() ?: 'C:\\F\\Discord')
+            File sender = new File(discordProject, 'scripts/send_release_log.py')
+            if (!sender.isFile()) {
+                logger.warn("[BDC Publish] Discord sender is unavailable: ${sender}. Platform publishing remains successful.")
+                return
+            }
+            File messageFile = new File(rootProject.buildDir, "tmp/discord-publish/${bdcDiscordSha256(message)}.md")
+            messageFile.parentFile.mkdirs()
+            messageFile.setText(message + System.lineSeparator(), 'UTF-8')
+            String python = project.findProperty('bdc_discord_python_path')?.toString()?.trim() ?: new File(discordProject, '.venv/Scripts/python.exe').absolutePath
+            if (!new File(python).isFile()) python = 'python'
+            String target = project.findProperty('bdc_discord_target')?.toString()?.trim() ?: 'bdc'
+            Process process = new ProcessBuilder([python, sender.absolutePath, '--target', target, '--file', messageFile.absolutePath]).directory(discordProject).redirectErrorStream(true).start()
+            String output = process.inputStream.getText('UTF-8')
+            int exitCode = process.waitFor()
+            if (exitCode == 0) logger.lifecycle("Discord release notification completed for ${target}.")
+            else logger.warn("[BDC Publish] Discord sender exited with ${exitCode}: ${output.replaceAll(/\s+/, ' ').take(800)}. Platform publishing remains successful.")
+        } catch (Exception error) {
+            logger.warn("[BDC Publish] Discord notification failed: ${error.class.simpleName}: ${error.message}. Platform publishing remains successful.")
+        }
+    }
+}
+
+tasks.named('publishDiscordRelease').configure {
+    mustRunAfter ':forge-1.20.1:publishAll', ':neoforge-1.21.1:publishAll'
+}
+tasks.named('publishAllVersions').configure { dependsOn 'publishDiscordRelease' }

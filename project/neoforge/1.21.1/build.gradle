@@ -3,9 +3,11 @@ plugins {
     id 'maven-publish'
     id 'idea'
     id 'net.neoforged.moddev' version '2.0.141'
+    id 'me.modmuss50.mod-publish-plugin' version '1.0.0'
 }
 
 apply from: rootProject.file('gradle/load-version-properties.gradle')
+apply from: rootProject.file('gradle/bdc-publishing.gradle')
 
 version = mod_version
 group = mod_group_id

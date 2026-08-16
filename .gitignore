@@ -17,6 +17,9 @@ out
 build
 .gradle
 
+# Local publishing credentials; never commit platform tokens.
+api.properties
+
 # Other
 eclipse
 run

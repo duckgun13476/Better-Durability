@@ -1,0 +1,31 @@
+def bdcPublishableProjects = [':forge-1.20.1', ':neoforge-1.21.1']
+
+gradle.projectsEvaluated {
+    Task previous = null
+    bdcPublishableProjects.collect { rootProject.project(it) }.each { target ->
+        ['publishCurseForge', 'publishMods'].each { taskName ->
+            Task current = target.tasks.findByName(taskName)
+            if (current != null && previous != null) current.mustRunAfter(previous)
+            if (current != null) previous = current
+        }
+    }
+}
+
+tasks.register('packageAllVersions') {
+    group = 'Publishing'
+    description = 'Builds and verifies the final Forge 1.20.1 and NeoForge 1.21.1 artifacts.'
+    dependsOn bdcPublishableProjects.collect { "${it}:verifyPublishArtifact" }
+}
+
+tasks.register('publishInfoAllVersions') {
+    group = 'Publishing'
+    description = 'Shows the publication targets without uploading.'
+    dependsOn bdcPublishableProjects.collect { "${it}:publishInfo" }
+}
+
+tasks.register('publishAllVersions') {
+    group = 'Publishing'
+    description = 'Publishes both supported BetterDurabilityCommunity versions.'
+    dependsOn 'packageAllVersions'
+    dependsOn bdcPublishableProjects.collect { "${it}:publishAll" }
+}
