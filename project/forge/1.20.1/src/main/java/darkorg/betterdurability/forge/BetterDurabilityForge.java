@@ -9,8 +9,8 @@ import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 public class BetterDurabilityForge {
     public static IEventBus MOD_EVENT_BUS;
 
-    public BetterDurabilityForge(FMLJavaModLoadingContext pFMLJavaModLoadingContext) {
-        MOD_EVENT_BUS = pFMLJavaModLoadingContext.getModEventBus();
+    public BetterDurabilityForge() {
+        MOD_EVENT_BUS = FMLJavaModLoadingContext.get().getModEventBus();
         BetterDurability.init();
         BetterDurability.initClient();
     }
