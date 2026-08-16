@@ -145,8 +145,8 @@ tasks.register('publishCurseForge') {
 publishMods {
     def credentials = bdcReadPublishingProperties()
     String token = credentials?.getProperty('MODRINTH_TOKEN')?.trim()
-    String projectId = project.findProperty('modrinth_id')?.toString()?.trim()
-    if (token && projectId) {
+    String modrinthProjectId = project.findProperty('modrinth_id')?.toString()?.trim()
+    if (token && modrinthProjectId) {
         file = bdcReadArtifact()
         changelog = bdcReadChangelog()
         type = (project.findProperty('publish_version')?.toString()?.trim()?.toLowerCase(Locale.ROOT) == 'beta') ? BETA : STABLE
@@ -155,7 +155,7 @@ publishMods {
         modLoaders.add(bdcReadLoader())
         modrinth {
             accessToken = token
-            projectId = projectId
+            projectId = modrinthProjectId
             minecraftVersions.add(minecraft_version)
         }
     }

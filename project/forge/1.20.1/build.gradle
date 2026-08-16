@@ -16,7 +16,6 @@ plugins {
 
 apply plugin: 'org.spongepowered.mixin'
 apply from: rootProject.file('gradle/load-version-properties.gradle')
-apply from: rootProject.file('gradle/bdc-publishing.gradle')
 
 version = mod_version
 group = mod_group_id
@@ -61,3 +60,5 @@ tasks.named('jar', Jar).configure {
     finalizedBy 'reobfJar'
 }
 tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }
+
+apply from: rootProject.file('gradle/bdc-publishing.gradle')
