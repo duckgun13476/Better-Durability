@@ -129,6 +129,16 @@ ext.boReadPublishDisplayName = {
     return "${mod_name}_v${mod_version}_for_MC_${minecraft_version}${boReadPublishDisplaySuffix()}"
 }
 
+// Modrinth validates version titles more strictly than CurseForge.  Keep the
+// CurseForge display name stable for its success ledger, while allowing a
+// concise platform-specific title when necessary.
+ext.boReadPublishModrinthDisplayName = {
+    def configuredDisplayName = project.findProperty('bo_publish_modrinth_display_name')?.toString()?.trim()
+    return configuredDisplayName != null && !configuredDisplayName.isEmpty()
+            ? configuredDisplayName
+            : boReadPublishDisplayName()
+}
+
 ext.boReadPublishVersionId = {
     def configuredVersionId = project.findProperty('bo_publish_version_id')?.toString()?.trim()
     if (configuredVersionId != null && !configuredVersionId.isEmpty()) {
@@ -742,7 +752,7 @@ publishMods {
     String publishVersionType = boReadPublishVersionType()
     type = publishVersionType == 'beta' ? BETA : publishVersionType == 'alpha' ? ALPHA : STABLE
     version = boReadPublishVersionId()
-    displayName = boReadPublishDisplayName()
+    displayName = boReadPublishModrinthDisplayName()
 
     boReadPublishModrinthLoaders().each { loaderName ->
         modLoaders.add(loaderName)

@@ -1,0 +1,19 @@
+{
+    "schemaVersion": 1,
+    "entries": [
+        {
+            "platform": "curseforge",
+            "projectId": "1655072",
+            "minecraftVersion": "1.21.1",
+            "loader": "neoforge",
+            "versionId": "1.21.1-1.3.8-neoforge",
+            "displayName": "BetterDurabilityCommunity 1.21.1-1.3.8 for Minecraft 1.21.1 (neoforge)",
+            "artifactFileName": "betterdurability-1.21.1-1.3.8.jar",
+            "artifactSha256": "df82e74ec39e7267d5254dd3314694c86120c796b1b9425c4375ad0d221eec32",
+            "status": "success",
+            "source": "direct-curseforge-upload",
+            "confirmedAt": "2026-08-16T20:56:02+08:00",
+            "fileId": 8662290
+        }
+    ]
+}
