@@ -11,3 +11,4 @@
 7. Reorganize the repository into separate Forge 1.20.1 and NeoForge 1.21.1 version projects with root aggregate build tasks.
 8. Add the BDC two-version CurseForge, Modrinth, and soft-failure Discord publication workflow.
 9. Merge the upstream 1.20.1 Common and Forge durability implementation into the active Forge source set while retaining the BDC combined build layout.
+10. Restore the useful upstream Forge 1.16.5, 1.18.2, and 1.19.2 version sources under the combined project structure.
