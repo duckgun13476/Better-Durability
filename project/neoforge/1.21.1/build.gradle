@@ -41,7 +41,10 @@ dependencies {
     compileOnly('net.createmod.ponder:ponder-neoforge:1.0.81+mc1.21.1')
 }
 
-sourceSets.main.resources { srcDir 'src/generated/resources' }
+sourceSets.main.resources {
+    srcDir 'src/generated/resources'
+    srcDir rootProject.file('common/src/main/resources')
+}
 
 def generateModMetadata = tasks.register('generateModMetadata', ProcessResources) {
     def replaceProperties = [
