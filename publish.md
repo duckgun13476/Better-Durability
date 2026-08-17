@@ -1,5 +1,28 @@
 # BetterDurabilityCommunity
 
+## Multi-Version Release
+
+BetterDurabilityCommunity is now available for:
+
+- **Forge 1.19.2**
+- **Forge 1.20.1**
+- **NeoForge 1.21.1**
+
+This release restores and verifies the broken-item system across all three
+published targets. Supported equipment is preserved at its broken durability
+threshold instead of disappearing.
+
+### Changes
+
+- Broken items are clearly marked with a red localized **(Broken)** suffix.
+- Broken armor remains equipped but no longer provides armor or toughness.
+- Broken tools and weapons lose their normal attribute bonuses.
+- Enchantments are retained; their tooltip entries turn red while the item is
+  broken.
+- The Forge 1.19.2 build now includes the same broken-item presentation,
+  armor handling, attribute removal, and durability protection as the modern
+  releases.
+
 BetterDurabilityCommunity prevents supported tools, weapons, armor, shields,
 and other damageable equipment from disappearing when their durability is
 exhausted. Instead, the item remains in a **broken** state until it is
@@ -22,7 +45,8 @@ enchantments while preventing it from being used as if it were intact.
 
 ## Compatibility
 
-The current community-maintained release targets **NeoForge 1.21.1**.
+The current community-maintained release targets **Forge 1.19.2**, **Forge
+1.20.1**, and **NeoForge 1.21.1**.
 
 The mod ID remains `betterdurability` for configuration and world
 compatibility with existing installations.
