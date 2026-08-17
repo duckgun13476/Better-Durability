@@ -16,7 +16,8 @@ import java.security.MessageDigest
 def boResolvePublishingRepositoryRoot = {
     File current = project.projectDir
     while (current != null) {
-        if (new File(current, 'gradle/bo-common.properties').exists()) {
+        if (new File(current, 'gradle/bdc-publishing.gradle').exists()
+                || new File(current, 'gradle/bo-common.properties').exists()) {
             return current
         }
         current = current.parentFile

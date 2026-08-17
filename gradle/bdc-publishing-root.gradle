@@ -1,4 +1,27 @@
-def bdcPublishableProjects = [':forge-1.20.1', ':neoforge-1.21.1']
+def bdcPublishableProjects = [':forge-1.19.2', ':forge-1.20.1', ':neoforge-1.21.1']
+def bdcForge1192Dir = rootProject.file('project/forge/1.19.2')
+def bdcForge1192Java = project.services.get(org.gradle.jvm.toolchain.JavaToolchainService).launcherFor { spec ->
+    spec.languageVersion = JavaLanguageVersion.of(17)
+}
+
+def bdcForge1192Task = { String name, String description, List<String> arguments ->
+    tasks.register(name, Exec) {
+        group = 'Publishing'
+        this.description = description
+        workingDir bdcForge1192Dir
+        commandLine 'cmd', '/c', 'gradlew.bat', *arguments, '--no-daemon', '--no-configuration-cache', '--console=plain'
+        doFirst {
+            def javaHome = bdcForge1192Java.get().metadata.installationPath.asFile.absolutePath
+            environment 'JAVA_HOME', javaHome
+            environment 'PATH', "${javaHome}${File.separator}bin${File.pathSeparator}${System.getenv('PATH')}"
+        }
+    }
+}
+
+def bdcForge1192Build = bdcForge1192Task(
+        'forge1192Build',
+        'Builds the standalone Forge 1.19.2 artifact with Java 17 and Gradle 7.4.',
+        ['build'])
 
 gradle.projectsEvaluated {
     Task previous = null
@@ -13,7 +36,8 @@ gradle.projectsEvaluated {
 
 tasks.register('packageAllVersions') {
     group = 'Publishing'
-    description = 'Builds and verifies the final Forge 1.20.1 and NeoForge 1.21.1 artifacts.'
+    description = 'Builds and verifies the final Forge 1.19.2, Forge 1.20.1, and NeoForge 1.21.1 artifacts.'
+    dependsOn bdcForge1192Build
     dependsOn bdcPublishableProjects.collect { "${it}:verifyPublishArtifact" }
 }
 
@@ -25,7 +49,7 @@ tasks.register('publishInfoAllVersions') {
 
 tasks.register('publishAllVersions') {
     group = 'Publishing'
-    description = 'Publishes both supported BetterDurabilityCommunity versions.'
+    description = 'Publishes the supported Forge 1.19.2, Forge 1.20.1, and NeoForge 1.21.1 versions.'
     dependsOn 'packageAllVersions'
     dependsOn bdcPublishableProjects.collect { "${it}:publishAll" }
 }
