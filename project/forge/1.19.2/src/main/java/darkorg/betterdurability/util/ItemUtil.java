@@ -38,4 +38,8 @@ public class ItemUtil {
     public static boolean isCrossbow(Item item) {
         return item instanceof CrossbowItem;
     }
+
+    public static boolean isArmor(Item item) {
+        return item instanceof ArmorItem;
+    }
 }

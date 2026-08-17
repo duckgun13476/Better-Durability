@@ -12,6 +12,7 @@ public class StackUtil {
 
             Item item = stack.getItem();
 
+            if (ItemUtil.isArmor(item)) return durabilityLeft <= 2;
             if (ItemUtil.isSword(item) || ItemUtil.isTrident(item)) return durabilityLeft <= 2;
             if (ItemUtil.isTool(item) || ItemUtil.isHoe(item) || ItemUtil.isShears(item)) return durabilityLeft <= 1;
         }
@@ -75,6 +76,23 @@ public class StackUtil {
     }
 
     public static boolean isBroken(ItemStack stack) {
-        return isInvalidLeftClickBlock(stack) || isInvalidLeftClickEntity(stack) || isInvalidRightClickBlock(stack) || isInvalidRightClickEntity(stack) || isInvalidRightClickItem(stack);
+        int brokenThreshold = getBrokenThreshold(stack);
+        return brokenThreshold > 0 && stack.isDamageableItem()
+                && stack.getMaxDamage() - stack.getDamageValue() <= brokenThreshold;
+    }
+
+    public static boolean wouldBreak(ItemStack stack, int damage) {
+        int brokenThreshold = getBrokenThreshold(stack);
+        return brokenThreshold > 0 && stack.isDamageableItem()
+                && stack.getMaxDamage() - stack.getDamageValue() - damage <= brokenThreshold;
+    }
+
+    public static int getBrokenThreshold(ItemStack stack) {
+        Item item = stack.getItem();
+        if (ItemUtil.isArmor(item) || ItemUtil.isTool(item) || ItemUtil.isSword(item) || ItemUtil.isTrident(item)) return 2;
+        if (ItemUtil.isCrossbow(item)) return 9;
+        if (ItemUtil.isFishingRod(item)) return 5;
+        if (ItemUtil.isHoe(item) || ItemUtil.isShears(item) || ItemUtil.isFlintAndSteel(item) || ItemUtil.isBow(item)) return 1;
+        return 0;
     }
 }

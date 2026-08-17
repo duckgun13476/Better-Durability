@@ -11,5 +11,6 @@ public class ModLanguageProvider extends LanguageProvider {
     @Override
     protected void addTranslations() {
         add("tooltip.betterdurability.broken", "Broken");
+        add("tooltip.betterdurability.broken_suffix", "(Broken)");
     }
 }

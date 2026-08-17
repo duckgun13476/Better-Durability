@@ -18,7 +18,10 @@ public class ForgeClientEvents {
         List<Component> tooltip = event.getToolTip();
 
         if (StackUtil.isBroken(event.getItemStack())) {
-            tooltip.add(0, Component.translatable("tooltip.betterdurability.broken").withStyle(ChatFormatting.RED));
+            int enchantmentLines = Math.min(event.getItemStack().getEnchantmentTags().size(), tooltip.size() - 1);
+            for (int index = 1; index <= enchantmentLines; index++) {
+                tooltip.set(index, tooltip.get(index).copy().withStyle(ChatFormatting.RED));
+            }
         }
     }
 }
