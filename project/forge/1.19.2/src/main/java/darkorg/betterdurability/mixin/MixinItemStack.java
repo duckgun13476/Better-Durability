@@ -29,9 +29,8 @@ public abstract class MixinItemStack {
                     // tool from the Deployer's held-item inventory.
                     return;
                 }
-                stack.setDamageValue(DeployerToolPolicy.usableDamage(stack, StackUtil.getBrokenThreshold(stack)));
-                cir.setReturnValue(false);
-                return;
+                // Preserve Better Durability's normal broken state. Create sees
+                // the damaged tool and stops instead of silently repairing it.
             }
             stack.setDamageValue(stack.getMaxDamage() - StackUtil.getBrokenThreshold(stack));
             cir.setReturnValue(false);

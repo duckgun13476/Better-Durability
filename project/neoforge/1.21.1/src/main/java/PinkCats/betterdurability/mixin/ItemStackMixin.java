@@ -73,12 +73,8 @@ public abstract class ItemStackMixin {
         if (DeployerToolPolicy.destroysWhenBroken(self)) {
             onBreak.accept(self.getItem());
             self.shrink(1);
-        } else {
-            VanillaDamageableType itemType = VanillaDamageableType.getTypeByItem(self.getItem());
-            int brokenThreshold = itemType == null ? 1 : itemType.brokenThreshold;
-            this.setDamageValue(DeployerToolPolicy.usableDamage(self, brokenThreshold));
+            ci.cancel();
         }
-        ci.cancel();
     }
 
     @Inject(method = "hurt(ILnet/minecraft/util/RandomSource;Lnet/minecraft/server/level/ServerPlayer;)Z",

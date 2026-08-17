@@ -22,7 +22,4 @@ public final class DeployerToolPolicy {
                 .contains(stack.getItem().builtInRegistryHolder().key().location().toString());
     }
 
-    public static int usableDamage(ItemStack stack, int brokenThreshold) {
-        return Math.max(0, stack.getMaxDamage() - brokenThreshold - 1);
-    }
 }

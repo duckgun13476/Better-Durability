@@ -44,10 +44,8 @@ public abstract class MixinItemStack implements UnbreakableItemStack {
         if (DeployerToolPolicy.destroysWhenBroken(self)) {
             onBreak.accept(self.getItem());
             self.shrink(1);
-        } else {
-            self.setDamageValue(DeployerToolPolicy.usableDamage(self));
+            ci.cancel();
         }
-        ci.cancel();
     }
 
     /**

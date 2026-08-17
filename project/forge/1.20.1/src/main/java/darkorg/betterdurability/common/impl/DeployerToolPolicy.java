@@ -21,7 +21,4 @@ public final class DeployerToolPolicy {
         return BetterDurabilityConfig.isDeployerConsumable(stack.getItem());
     }
 
-    public static int usableDamage(ItemStack stack) {
-        return Math.max(0, stack.getMaxDamage() - 2);
-    }
 }
