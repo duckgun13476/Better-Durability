@@ -4,23 +4,52 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import darkorg.betterdurability.common.api.UnbreakableItemStack;
 import darkorg.betterdurability.common.config.BetterDurabilityConfig;
+import darkorg.betterdurability.common.impl.DeployerToolPolicy;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EquipmentSlot;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.function.Consumer;
 
 @Mixin(ItemStack.class)
 public abstract class MixinItemStack implements UnbreakableItemStack {
+    @Inject(method = "hurtAndBreak", at = @At("HEAD"), cancellable = true)
+    private void betterDurability$handleDeployerBreak(
+            int damage,
+            LivingEntity entity,
+            Consumer<Item> onBreak,
+            CallbackInfo ci
+    ) {
+        ItemStack self = (ItemStack) (Object) this;
+        if (!DeployerToolPolicy.isDeployer(entity)
+                || !self.isDamageableItem()
+                || self.getDamageValue() + damage < self.getMaxDamage() - 1) {
+            return;
+        }
+
+        if (DeployerToolPolicy.destroysWhenBroken(self)) {
+            onBreak.accept(self.getItem());
+            self.shrink(1);
+        } else {
+            self.setDamageValue(DeployerToolPolicy.usableDamage(self));
+        }
+        ci.cancel();
+    }
+
     /**
      * @return True, if item is broken.
      */

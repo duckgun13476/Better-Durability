@@ -3,6 +3,7 @@ package darkorg.betterdurability.mixin;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import darkorg.betterdurability.util.StackUtil;
+import darkorg.betterdurability.util.DeployerToolPolicy;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -22,6 +23,16 @@ public abstract class MixinItemStack {
     private void betterDurability$preserveBrokenItem(int damage, RandomSource random, ServerPlayer player, CallbackInfoReturnable<Boolean> cir) {
         ItemStack stack = (ItemStack) (Object) this;
         if (StackUtil.wouldBreak(stack, damage)) {
+            if (DeployerToolPolicy.isDeployer(player)) {
+                if (DeployerToolPolicy.destroysWhenBroken(stack)) {
+                    // Let vanilla complete the normal break, which removes the
+                    // tool from the Deployer's held-item inventory.
+                    return;
+                }
+                stack.setDamageValue(DeployerToolPolicy.usableDamage(stack, StackUtil.getBrokenThreshold(stack)));
+                cir.setReturnValue(false);
+                return;
+            }
             stack.setDamageValue(stack.getMaxDamage() - StackUtil.getBrokenThreshold(stack));
             cir.setReturnValue(false);
         }

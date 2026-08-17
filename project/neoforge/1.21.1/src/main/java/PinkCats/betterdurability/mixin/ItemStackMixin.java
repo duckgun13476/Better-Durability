@@ -2,6 +2,7 @@ package PinkCats.betterdurability.mixin;
 
 import PinkCats.betterdurability.event.ItemDurabilityEvent.ItemBreaking;
 import PinkCats.betterdurability.durability.DurabilityPolicy;
+import PinkCats.betterdurability.durability.DeployerToolPolicy;
 import PinkCats.betterdurability.util.VanillaDamageableType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -58,6 +59,26 @@ public abstract class ItemStackMixin {
                 ci.cancel();
             }
         }
+    }
+
+    @Inject(method = "hurtAndBreak(ILnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Consumer;)V",
+            cancellable = true, at = @At("HEAD"))
+    private void betterdurability$handleDeployerBreak(int damage, ServerLevel level, LivingEntity entity,
+                                                       Consumer<Item> onBreak, CallbackInfo ci) {
+        ItemStack self = (ItemStack) (Object) this;
+        if (!DeployerToolPolicy.isDeployer(entity) || this.getDamageValue() + damage < this.getMaxDamage()) {
+            return;
+        }
+
+        if (DeployerToolPolicy.destroysWhenBroken(self)) {
+            onBreak.accept(self.getItem());
+            self.shrink(1);
+        } else {
+            VanillaDamageableType itemType = VanillaDamageableType.getTypeByItem(self.getItem());
+            int brokenThreshold = itemType == null ? 1 : itemType.brokenThreshold;
+            this.setDamageValue(DeployerToolPolicy.usableDamage(self, brokenThreshold));
+        }
+        ci.cancel();
     }
 
     @Inject(method = "hurt(ILnet/minecraft/util/RandomSource;Lnet/minecraft/server/level/ServerPlayer;)Z",
