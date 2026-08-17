@@ -14,6 +14,34 @@
             "source": "direct-curseforge-upload",
             "confirmedAt": "2026-08-16T20:56:02+08:00",
             "fileId": 8662290
+        },
+        {
+            "platform": "curseforge",
+            "projectId": "1655072",
+            "minecraftVersion": "1.19.2",
+            "loader": "forge",
+            "versionId": "1.19.2-1.1.0-forge",
+            "displayName": "BetterDurabilityCommunity 1.19.2-1.1.0 for Minecraft 1.19.2 (forge)",
+            "artifactFileName": "betterdurability-1.19.2-1.1.0.jar",
+            "artifactSha256": "25286542f0be13d2c566ad15547ee881f9b77231edf21b18bbfea6c10d4263db",
+            "status": "success",
+            "source": "direct-curseforge-upload",
+            "confirmedAt": "2026-08-17T17:45:37+08:00",
+            "fileId": 8668657
+        },
+        {
+            "platform": "curseforge",
+            "projectId": "1655072",
+            "minecraftVersion": "1.20.1",
+            "loader": "forge",
+            "versionId": "1.20.1-1.0.0-forge",
+            "displayName": "BetterDurabilityCommunity 1.20.1-1.0.0 for Minecraft 1.20.1 (forge)",
+            "artifactFileName": "betterdurability-1.20.1-1.0.0.jar",
+            "artifactSha256": "a7aca38ebe3cbcdf3e47ba1f28746b256a82695d2dd67362e3a0f4e47027ebd6",
+            "status": "success",
+            "source": "direct-curseforge-upload",
+            "confirmedAt": "2026-08-17T17:45:49+08:00",
+            "fileId": 8668660
         }
     ]
 }
