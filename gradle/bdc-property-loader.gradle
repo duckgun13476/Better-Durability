@@ -1,0 +1,29 @@
+def loadBdcProperties = { File propertyFile ->
+    if (propertyFile == null || !propertyFile.isFile()) {
+        return
+    }
+
+    Properties properties = new Properties()
+    propertyFile.withInputStream { properties.load(it) }
+    properties.each { key, value ->
+        String propertyName = key.toString()
+        if (!project.hasProperty(propertyName)) {
+            project.ext.set(propertyName, value)
+        }
+    }
+}
+
+def findBdcCommonProperties = {
+    File currentDir = project.projectDir
+    while (currentDir != null) {
+        File candidate = new File(currentDir, 'gradle/bdc-common.properties')
+        if (candidate.isFile()) {
+            return candidate
+        }
+        currentDir = currentDir.parentFile
+    }
+    return null
+}
+
+loadBdcProperties(findBdcCommonProperties())
+loadBdcProperties(project.file('gradle.properties'))

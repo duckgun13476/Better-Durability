@@ -1,5 +1,1 @@
-import java.util.Properties
-
-Properties versionProperties = new Properties()
-file('gradle.properties').withInputStream { versionProperties.load(it) }
-versionProperties.each { key, value -> ext.set(key.toString(), value.toString()) }
+apply from: rootProject.file('gradle/bdc-property-loader.gradle')
