@@ -1,6 +1,10 @@
 package PinkCats.betterdurability.mixin;
 
 import PinkCats.betterdurability.event.ItemDurabilityEvent.ItemBreaking;
+import PinkCats.betterdurability.durability.DurabilityPolicy;
+import PinkCats.betterdurability.util.VanillaDamageableType;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -24,6 +28,19 @@ public abstract class ItemStackMixin {
     @Shadow public abstract int getDamageValue();
     @Shadow public abstract void setDamageValue(int pDamage);
     @Shadow public abstract int getMaxDamage();
+
+    @Inject(method = "getHoverName", at = @At("RETURN"), cancellable = true)
+    private void injectBrokenHoverName(CallbackInfoReturnable<Component> cir) {
+        ItemStack self = (ItemStack) (Object) this;
+        Item item = self.getItem();
+        VanillaDamageableType itemType = VanillaDamageableType.getTypeByItem(item);
+        if ((itemType != null && itemType.isItemBroken(self) && !DurabilityPolicy.isBlacklisted(item, itemType))
+                || VanillaDamageableType.isWhitelistedItemKnownBroken(self)) {
+            cir.setReturnValue(cir.getReturnValue().copy()
+                    .append(Component.literal(" "))
+                    .append(Component.translatable("tooltip.betterdurability.broken_suffix").withStyle(ChatFormatting.RED)));
+        }
+    }
 
     @Inject(method = "hurtAndBreak(ILnet/minecraft/server/level/ServerLevel;Lnet/minecraft/world/entity/LivingEntity;Ljava/util/function/Consumer;)V",
             cancellable = true, locals = LocalCapture.CAPTURE_FAILHARD,

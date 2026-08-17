@@ -11,6 +11,7 @@ import net.minecraft.world.item.enchantment.EnchantmentEffectComponents;
 import net.minecraft.world.item.enchantment.EnchantmentHelper;
 import net.neoforged.bus.api.SubscribeEvent;
 import net.neoforged.fml.common.EventBusSubscriber;
+import net.neoforged.neoforge.event.ItemAttributeModifierEvent;
 
 /**
  * Core logic is here.
@@ -41,6 +42,17 @@ public class DurabilityEventsHandler {
         if (itemType != null && itemType.isItemBroken(event.targetStack)
                 && !DurabilityPolicy.isBlacklisted(targetItem, itemType)) {
             event.setCanceled(true);
+        }
+    }
+
+    @SubscribeEvent
+    public static void onItemAttributeModifiers(ItemAttributeModifierEvent event) {
+        ItemStack stack = event.getItemStack();
+        Item item = stack.getItem();
+        VanillaDamageableType itemType = VanillaDamageableType.getTypeByItem(item);
+        if ((itemType != null && itemType.isItemBroken(stack) && !DurabilityPolicy.isBlacklisted(item, itemType))
+                || VanillaDamageableType.isWhitelistedItemKnownBroken(stack)) {
+            event.clearModifiers();
         }
     }
 

@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import darkorg.betterdurability.common.api.UnbreakableItemStack;
 import darkorg.betterdurability.common.config.BetterDurabilityConfig;
+import net.minecraft.ChatFormatting;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -35,6 +37,15 @@ public abstract class MixinItemStack implements UnbreakableItemStack {
             }
         } else {
             return false;
+        }
+    }
+
+    @Inject(method = "getHoverName", at = @At("RETURN"), cancellable = true)
+    private void BetterDurability$getHoverName(CallbackInfoReturnable<Component> pCallbackInfoReturnable) {
+        if (this.betterDurability$isBroken()) {
+            pCallbackInfoReturnable.setReturnValue(pCallbackInfoReturnable.getReturnValue().copy()
+                    .append(Component.literal(" "))
+                    .append(Component.translatable("tooltip.betterdurability.broken_suffix").withStyle(ChatFormatting.RED)));
         }
     }
 

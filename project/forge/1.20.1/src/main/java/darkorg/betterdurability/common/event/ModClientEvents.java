@@ -1,7 +1,6 @@
 package darkorg.betterdurability.common.event;
 
 import darkorg.betterdurability.common.impl.ModItemStack;
-import darkorg.betterdurability.common.registry.ModComponents;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.item.ItemStack;
@@ -17,7 +16,10 @@ public abstract class ModClientEvents {
             }
 
             if (ModItemStack.isBroken(pItemStack)) {
-                pComponents.add(0, Component.empty().append(ModComponents.BROKEN).withStyle(ChatFormatting.RED));
+                int enchantmentLines = Math.min(pItemStack.getEnchantmentTags().size(), pComponents.size() - 1);
+                for (int index = 1; index <= enchantmentLines; index++) {
+                    pComponents.set(index, pComponents.get(index).copy().withStyle(ChatFormatting.RED));
+                }
             }
         }
     }
