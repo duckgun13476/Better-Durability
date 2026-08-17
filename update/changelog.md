@@ -1,5 +1,17 @@
 # Changelog
 
+#### v1.19.2-1.1.0 / v1.20.1-1.0.0 / v1.21.1-1.3.8
+
+- Added verified Forge 1.19.2, Forge 1.20.1, and NeoForge 1.21.1 releases.
+- Broken items now show a localized red `(Broken)` suffix in their display name,
+  including the hotbar selection name.
+- Broken armor remains equipped but no longer grants armor or toughness; broken
+  tools and weapons no longer grant their normal attribute bonuses.
+- Enchantments are retained and their tooltip lines turn red while the item is
+  broken.
+- Forge 1.19.2 now receives the same broken-item presentation, armor handling,
+  attribute removal, and durability-threshold protection as the modern builds.
+
 ## BDC-combined (unreleased)
 
 1. Rename the player-visible mod name to BetterDurabilityCommunity while retaining the `betterdurability` mod id for configuration and world compatibility.
