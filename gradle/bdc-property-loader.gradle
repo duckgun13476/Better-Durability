@@ -25,5 +25,20 @@ def findBdcCommonProperties = {
     return null
 }
 
-loadBdcProperties(findBdcCommonProperties())
-loadBdcProperties(project.file('gradle.properties'))
+File commonProperties = findBdcCommonProperties()
+if (commonProperties == null) {
+    throw new GradleException("Unable to locate gradle/bdc-common.properties for ${project.path}")
+}
+
+File repositoryRoot = commonProperties.parentFile.parentFile
+String relativeProjectPath = repositoryRoot.toPath().relativize(project.projectDir.toPath())
+        .toString()
+        .replace('\\', '-')
+        .replace('/', '-')
+File versionProperties = new File(repositoryRoot, "gradle/bdc-versions/${relativeProjectPath}.properties")
+if (!versionProperties.isFile()) {
+    throw new GradleException("Missing BDC version properties for ${project.path}: ${versionProperties.absolutePath}")
+}
+
+loadBdcProperties(commonProperties)
+loadBdcProperties(versionProperties)
