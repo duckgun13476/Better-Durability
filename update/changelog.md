@@ -1,5 +1,11 @@
 # Changelog
 
+#### v1.3.9 — Beta
+
+- Added configurable Create Deployer tool consumption. Wooden and iron vanilla tools are consumed by default when exhausted; the list can be changed in the server configuration.
+- Tools outside that list, including diamond tools, retain their normal broken state in a Create Deployer, causing the Deployer to stop instead of silently restoring usable durability.
+- Applied the same Create Deployer behavior to Forge 1.19.2, Forge 1.20.1, and NeoForge 1.21.1.
+
 #### v1.19.2-1.1.0 / v1.20.1-1.0.0 / v1.21.1-1.3.8 — Beta
 
 This beta release brings BetterDurabilityCommunity to Forge 1.19.2, Forge 1.20.1, and NeoForge 1.21.1.
