@@ -26,6 +26,7 @@ public abstract class BetterDurabilityConfig {
         public final ConfigValue<Double> defaultItemDestroySpeed;
         public final ConfigValue<Double> defaultItemBrokenDestroySpeed;
         public final ConfigValue<String> blacklist;
+        public final ConfigValue<String> deployerConsumableItems;
 
         Gameplay(ForgeConfigSpec.Builder pBuilder) {
             pBuilder.comment("Settings related to gameplay").push("gameplay");
@@ -47,6 +48,11 @@ public abstract class BetterDurabilityConfig {
             blacklist = pBuilder
                     .comment("Items in this list will follow vanilla durability logic")
                     .define("blacklist", "minecraft:carrot_on_a_stick, minecraft:warped_fungus_on_a_stick");
+
+            deployerConsumableItems = pBuilder
+                    .comment("Create Deployer tools that disappear when exhausted.")
+                    .comment("All other Deployer tools are retained at usable durability. Use item IDs separated by commas.")
+                    .define("deployerConsumableItems", "minecraft:wooden_sword,minecraft:wooden_shovel,minecraft:wooden_pickaxe,minecraft:wooden_axe,minecraft:wooden_hoe,minecraft:iron_sword,minecraft:iron_shovel,minecraft:iron_pickaxe,minecraft:iron_axe,minecraft:iron_hoe");
             pBuilder.pop();
         }
     }
@@ -58,6 +64,10 @@ public abstract class BetterDurabilityConfig {
             BetterDurabilityConfig.blacklist = BetterDurabilityConfig.parseItemListConfig(BetterDurabilityConfig.GAMEPLAY.blacklist);
         }
         return BetterDurabilityConfig.blacklist.contains(pItem);
+    }
+
+    public static boolean isDeployerConsumable(Item pItem) {
+        return BetterDurabilityConfig.parseItemListConfig(BetterDurabilityConfig.GAMEPLAY.deployerConsumableItems).contains(pItem);
     }
 
     public static List<Item> parseItemListConfig(ConfigValue<String> pConfigList) {

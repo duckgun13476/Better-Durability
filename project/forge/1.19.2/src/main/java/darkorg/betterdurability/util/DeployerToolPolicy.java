@@ -2,8 +2,10 @@ package darkorg.betterdurability.util;
 
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.TieredItem;
-import net.minecraft.world.item.Tiers;
+import net.minecraft.world.item.Item;
+import net.minecraftforge.common.ForgeConfigSpec;
+
+import java.util.List;
 
 /**
  * Deployer-only durability policy. The class-name check keeps Create optional
@@ -12,6 +14,19 @@ import net.minecraft.world.item.Tiers;
 public final class DeployerToolPolicy {
     private static final String DEPLOYER_FAKE_PLAYER =
             "com.simibubi.create.content.kinetics.deployer.DeployerFakePlayer";
+    public static final ForgeConfigSpec SERVER_CONFIG;
+    private static final ForgeConfigSpec.ConfigValue<List<? extends String>> CONSUMABLE_ITEM_IDS;
+
+    static {
+        ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
+        builder.comment("Create Deployer settings").push("deployer");
+        CONSUMABLE_ITEM_IDS = builder
+                .comment("Tools that disappear when a Create Deployer exhausts them.")
+                .comment("All other Deployer tools are kept usable. Use fully qualified item IDs.")
+                .defineList("consumableItemIds", defaultConsumableItemIds(), value -> value instanceof String);
+        builder.pop();
+        SERVER_CONFIG = builder.build();
+    }
 
     private DeployerToolPolicy() {
     }
@@ -20,15 +35,20 @@ public final class DeployerToolPolicy {
         return entity != null && DEPLOYER_FAKE_PLAYER.equals(entity.getClass().getName());
     }
 
-    /** Wood and iron tools are deliberately consumable in a Create Deployer. */
+    /** Configured tools are deliberately consumable in a Create Deployer. */
     public static boolean destroysWhenBroken(ItemStack stack) {
-        if (!(stack.getItem() instanceof TieredItem tieredItem)) {
-            return false;
-        }
-        return tieredItem.getTier() == Tiers.WOOD || tieredItem.getTier() == Tiers.IRON;
+        Item item = stack.getItem();
+        return CONSUMABLE_ITEM_IDS.get().contains(item.builtInRegistryHolder().key().location().toString());
     }
 
     public static int usableDamage(ItemStack stack, int brokenThreshold) {
         return Math.max(0, stack.getMaxDamage() - brokenThreshold - 1);
+    }
+
+    private static List<String> defaultConsumableItemIds() {
+        return List.of(
+                "minecraft:wooden_sword", "minecraft:wooden_shovel", "minecraft:wooden_pickaxe", "minecraft:wooden_axe", "minecraft:wooden_hoe",
+                "minecraft:iron_sword", "minecraft:iron_shovel", "minecraft:iron_pickaxe", "minecraft:iron_axe", "minecraft:iron_hoe"
+        );
     }
 }

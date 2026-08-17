@@ -28,6 +28,7 @@ public class ConfigurationHandler {
     public static final Set<VanillaDamageableType> DISABLED_TYPES = new HashSet<>();
     public static final ModConfigSpec.ConfigValue<List<? extends String>> BLACKLISTED_ITEM_IDS;
     public static final ModConfigSpec.ConfigValue<List<? extends String>> WHITELISTED_ITEM_IDS;
+    public static final ModConfigSpec.ConfigValue<List<? extends String>> DEPLOYER_CONSUMABLE_ITEM_IDS;
     public static final Set<Item> BLACKLISTED_ITEMS = new HashSet<>();
     public static final Set<Item> WHITELISTED_ITEMS = new HashSet<>();
 
@@ -47,6 +48,16 @@ public class ConfigurationHandler {
                 .comment("However, since only the click event is canceled, some illogical situations may occur.")
                 .comment("Format is modId:itemId, modId can be omitted for vanilla.")
                 .defineList("whitelistedItemIds", ImmutableList.of(), obj -> true);
+        SERVER_BUILDER.pop();
+
+        SERVER_BUILDER.comment("Create Deployer settings").push("deployer");
+        DEPLOYER_CONSUMABLE_ITEM_IDS = SERVER_BUILDER
+                .comment("Tools that disappear when a Create Deployer exhausts them.")
+                .comment("All other Deployer tools are kept usable. Use fully qualified item IDs.")
+                .defineList("consumableItemIds", ImmutableList.of(
+                        "minecraft:wooden_sword", "minecraft:wooden_shovel", "minecraft:wooden_pickaxe", "minecraft:wooden_axe", "minecraft:wooden_hoe",
+                        "minecraft:iron_sword", "minecraft:iron_shovel", "minecraft:iron_pickaxe", "minecraft:iron_axe", "minecraft:iron_hoe"
+                ), obj -> obj instanceof String);
         SERVER_BUILDER.pop();
 
         SERVER_CONFIG = SERVER_BUILDER.build();
