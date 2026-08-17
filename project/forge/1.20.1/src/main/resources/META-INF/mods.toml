@@ -4,7 +4,7 @@ license = "MIT License"
 
 [[mods]]
 modId = "betterdurability"
-version = "1.20.1-1.0.0"
+version = "${mod_version}"
 displayName = "BetterDurabilityCommunity"
 displayURL = "https://www.curseforge.com/minecraft/mc-mods/better-durability-reforged"
 logoFile = "betterdurability.png"

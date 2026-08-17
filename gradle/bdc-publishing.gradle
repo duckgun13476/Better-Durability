@@ -140,10 +140,6 @@ ext.bdcReadPublishModrinthDisplayName = {
 }
 
 ext.bdcReadPublishVersionId = {
-    def configuredVersionId = project.findProperty('bdc_publish_version_id')?.toString()?.trim()
-    if (configuredVersionId != null && !configuredVersionId.isEmpty()) {
-        return configuredVersionId
-    }
     return "${minecraft_version}-${mod_version}${bdcReadPublishVersionSuffix()}"
 }
 
@@ -172,16 +168,10 @@ ext.bdcReadPublishOptionalDependencies = {
 }
 
 ext.bdcReadPublishArtifactFile = {
-    def relativePath = project.findProperty('bdc_publish_artifact_relative_path')?.toString()?.trim()
-    if (relativePath != null && !relativePath.isEmpty()) {
-        return project.file(relativePath)
-    }
-
-    def artifactTask = tasks.named(bdcReadPublishArtifactTaskName()).get()
-    if (!artifactTask.hasProperty('archiveFile')) {
-        throw new GradleException("Publishing task '${artifactTask.name}' does not expose archiveFile in project '${project.path}'")
-    }
-    return artifactTask.archiveFile.get().asFile
+    String artifactProjectDirectory = project.findProperty('bdc_publish_artifact_project_dir')?.toString()?.trim()
+    File artifactProject = artifactProjectDirectory ? new File(bdcPublishingRepositoryRootDir, artifactProjectDirectory) : project.projectDir
+    String artifactFileName = "${mod_id}-${mod_version}-${bdcReadPublishLoaderId()}-${minecraft_version}.jar"
+    return new File(artifactProject, "build/libs/${artifactFileName}")
 }
 
 // 发布前强制检查最终 jar 是否真实生成，避免平台产物缺失时继续上传其他版本。

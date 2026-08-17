@@ -42,3 +42,10 @@ if (!versionProperties.isFile()) {
 
 loadBdcProperties(commonProperties)
 loadBdcProperties(versionProperties)
+
+if (!project.hasProperty('release_version')) {
+    throw new GradleException("Missing shared release_version for ${project.path}")
+}
+if (!project.hasProperty('mod_version')) {
+    project.ext.set('mod_version', project.findProperty('release_version').toString())
+}

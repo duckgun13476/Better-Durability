@@ -73,4 +73,8 @@ publishing {
 
 tasks.withType(JavaCompile).configureEach { options.encoding = 'UTF-8' }
 
+tasks.named('jar', Jar).configure {
+    archiveFileName = "${mod_id}-${mod_version}-neoforge-${minecraft_version}.jar"
+}
+
 apply from: rootProject.file('gradle/bdc-publishing.gradle')

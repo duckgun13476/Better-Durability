@@ -13,7 +13,7 @@ apply from: project.file('../../../gradle/bdc-property-loader.gradle')
 apply plugin: 'net.minecraftforge.gradle'
 apply plugin: 'org.spongepowered.mixin'
 
-version = "${minecraft_version}-${mod_version}"
+version = mod_version
 group = mod_group_id
 archivesBaseName = mod_id
 
@@ -77,12 +77,13 @@ dependencies {
 }
 
 jar {
+    archiveFileName = "${mod_id}-${mod_version}-forge-${minecraft_version}.jar"
     manifest {
         attributes(["Specification-Title"     : mod_name,
                     "Specification-Vendor"    : mod_authors,
-                    "Specification-Version"   : "${minecraft_version}-${mod_version}",
+                    "Specification-Version"   : mod_version,
                     "Implementation-Title"    : project.name,
-                    "Implementation-Version"  : "${minecraft_version}-${mod_version}",
+                    "Implementation-Version"  : mod_version,
                     "Implementation-Vendor"   : mod_authors,
                     "MixinConfigs"             : "betterdurability.mixins.json",
                     "Implementation-Timestamp": new Date().format("yyyy-MM-dd'T'HH:mm:ssZ")])
