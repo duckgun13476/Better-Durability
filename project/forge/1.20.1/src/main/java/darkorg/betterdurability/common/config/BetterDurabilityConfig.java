@@ -51,8 +51,8 @@ public abstract class BetterDurabilityConfig {
 
             deployerConsumableItems = pBuilder
                     .comment("Create Deployer tools that disappear when exhausted.")
-                    .comment("All other Deployer tools are retained at usable durability. Use item IDs separated by commas.")
-                    .define("deployerConsumableItems", "minecraft:wooden_sword,minecraft:wooden_shovel,minecraft:wooden_pickaxe,minecraft:wooden_axe,minecraft:wooden_hoe,minecraft:iron_sword,minecraft:iron_shovel,minecraft:iron_pickaxe,minecraft:iron_axe,minecraft:iron_hoe");
+                    .comment("All other Deployer tools remain broken and stop the machine. Use item IDs separated by commas.")
+                    .define("deployerConsumableItems", "minecraft:wooden_sword,minecraft:wooden_shovel,minecraft:wooden_pickaxe,minecraft:wooden_axe,minecraft:wooden_hoe,minecraft:stone_sword,minecraft:stone_shovel,minecraft:stone_pickaxe,minecraft:stone_axe,minecraft:stone_hoe,minecraft:iron_sword,minecraft:iron_shovel,minecraft:iron_pickaxe,minecraft:iron_axe,minecraft:iron_hoe");
             pBuilder.pop();
         }
     }

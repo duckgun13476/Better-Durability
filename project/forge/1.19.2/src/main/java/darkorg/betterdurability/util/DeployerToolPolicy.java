@@ -22,7 +22,7 @@ public final class DeployerToolPolicy {
         builder.comment("Create Deployer settings").push("deployer");
         CONSUMABLE_ITEM_IDS = builder
                 .comment("Tools that disappear when a Create Deployer exhausts them.")
-                .comment("All other Deployer tools are kept usable. Use fully qualified item IDs.")
+                .comment("All other Deployer tools remain broken and stop the machine. Use fully qualified item IDs.")
                 .defineList("consumableItemIds", defaultConsumableItemIds(), value -> value instanceof String);
         builder.pop();
         SERVER_CONFIG = builder.build();
@@ -48,6 +48,7 @@ public final class DeployerToolPolicy {
     private static List<String> defaultConsumableItemIds() {
         return List.of(
                 "minecraft:wooden_sword", "minecraft:wooden_shovel", "minecraft:wooden_pickaxe", "minecraft:wooden_axe", "minecraft:wooden_hoe",
+                "minecraft:stone_sword", "minecraft:stone_shovel", "minecraft:stone_pickaxe", "minecraft:stone_axe", "minecraft:stone_hoe",
                 "minecraft:iron_sword", "minecraft:iron_shovel", "minecraft:iron_pickaxe", "minecraft:iron_axe", "minecraft:iron_hoe"
         );
     }

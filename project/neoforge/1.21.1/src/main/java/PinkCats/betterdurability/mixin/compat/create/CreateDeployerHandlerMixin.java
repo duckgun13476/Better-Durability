@@ -1,9 +1,13 @@
 package PinkCats.betterdurability.mixin.compat.create;
 
 import PinkCats.betterdurability.durability.DurabilityPolicy;
+import PinkCats.betterdurability.durability.DeployerToolPolicy;
+import PinkCats.betterdurability.util.VanillaDamageableType;
 import PinkCats.betterdurability.event.ItemDurabilityEvent.ItemUsage;
 import com.simibubi.create.content.kinetics.deployer.DeployerFakePlayer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.Vec3;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Mixin;
@@ -35,10 +39,19 @@ public class CreateDeployerHandlerMixin {
     ) {
         // Mode is package-private in Create. The broken-tool policy itself is
         // independent of the action type, so use the public right-click slot.
+        ItemStack held = player.getMainHandItem();
         if (!DurabilityPolicy.canUseTool(
-            player.getMainHandItem(),
+            held,
             ItemUsage.Type.TOOL_RIGHT_CLICK_BLOCK
         )) {
+            // Better Durability marks axes, pickaxes, shovels, and swords as
+            // broken before their vanilla durability reaches zero. Consume
+            // configured disposable tools here, before the broken-tool guard
+            // stops Create from reaching ItemStack#hurtAndBreak.
+            if (VanillaDamageableType.isItemKnownBroken(held)
+                    && DeployerToolPolicy.destroysWhenBroken(held)) {
+                player.setItemInHand(InteractionHand.MAIN_HAND, ItemStack.EMPTY);
+            }
             ci.cancel();
         }
     }

@@ -53,9 +53,10 @@ public class ConfigurationHandler {
         SERVER_BUILDER.comment("Create Deployer settings").push("deployer");
         DEPLOYER_CONSUMABLE_ITEM_IDS = SERVER_BUILDER
                 .comment("Tools that disappear when a Create Deployer exhausts them.")
-                .comment("All other Deployer tools are kept usable. Use fully qualified item IDs.")
+                .comment("All other Deployer tools remain broken and stop the machine. Use fully qualified item IDs.")
                 .defineList("consumableItemIds", ImmutableList.of(
                         "minecraft:wooden_sword", "minecraft:wooden_shovel", "minecraft:wooden_pickaxe", "minecraft:wooden_axe", "minecraft:wooden_hoe",
+                        "minecraft:stone_sword", "minecraft:stone_shovel", "minecraft:stone_pickaxe", "minecraft:stone_axe", "minecraft:stone_hoe",
                         "minecraft:iron_sword", "minecraft:iron_shovel", "minecraft:iron_pickaxe", "minecraft:iron_axe", "minecraft:iron_hoe"
                 ), obj -> obj instanceof String);
         SERVER_BUILDER.pop();

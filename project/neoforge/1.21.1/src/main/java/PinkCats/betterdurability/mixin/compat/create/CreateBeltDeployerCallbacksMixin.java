@@ -1,11 +1,14 @@
 package PinkCats.betterdurability.mixin.compat.create;
 
 import PinkCats.betterdurability.durability.DurabilityPolicy;
+import PinkCats.betterdurability.durability.DeployerToolPolicy;
 import PinkCats.betterdurability.event.ItemDurabilityEvent.ItemUsage;
+import PinkCats.betterdurability.util.VanillaDamageableType;
 import com.simibubi.create.content.kinetics.belt.behaviour.TransportedItemStackHandlerBehaviour;
 import com.simibubi.create.content.kinetics.belt.transport.TransportedItemStack;
 import com.simibubi.create.content.kinetics.deployer.DeployerBlockEntity;
 import net.minecraft.world.item.crafting.Recipe;
+import net.minecraft.world.InteractionHand;
 import org.spongepowered.asm.mixin.Pseudo;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -28,10 +31,21 @@ public class CreateBeltDeployerCallbacksMixin {
         CallbackInfo ci
     ) {
         var player = blockEntity.getPlayer();
-        if (player == null || !DurabilityPolicy.canUseTool(
-            player.getMainHandItem(),
+        if (player == null) {
+            ci.cancel();
+            return;
+        }
+
+        var held = player.getMainHandItem();
+        if (!DurabilityPolicy.canUseTool(
+            held,
             ItemUsage.Type.TOOL_RIGHT_CLICK_BLOCK
         )) {
+            if (VanillaDamageableType.isItemKnownBroken(held)
+                    && DeployerToolPolicy.destroysWhenBroken(held)) {
+                player.setItemInHand(InteractionHand.MAIN_HAND, net.minecraft.world.item.ItemStack.EMPTY);
+                blockEntity.notifyUpdate();
+            }
             ci.cancel();
         }
     }
