@@ -57,8 +57,10 @@ public abstract class LivingEntityMixin {
                     }
                 }
             }
-            result -= invalidToughness;
-            cir.setReturnValue(result);
+            // Item-declared values can exceed the entity's currently effective
+            // value after other modifiers have applied. Broken armor must not
+            // turn a valid attribute into a negative one.
+            cir.setReturnValue(Math.max(0.0D, result - invalidToughness));
         }
     }
     @Inject(method = "getArmorValue()I", cancellable = true,
@@ -74,8 +76,9 @@ public abstract class LivingEntityMixin {
                 }
             }
         }
-        result -= invalidDefense;
-        cir.setReturnValue(result);
+        // Keep broken armor ineffective without exposing a negative armor
+        // value to HUD integrations.
+        cir.setReturnValue(Math.max(0, result - invalidDefense));
     }
 
     // inject the Shield Checking
