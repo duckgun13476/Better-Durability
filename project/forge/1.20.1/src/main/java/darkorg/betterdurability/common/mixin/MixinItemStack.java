@@ -14,7 +14,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.Attribute;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.state.BlockState;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,7 +30,7 @@ public abstract class MixinItemStack implements UnbreakableItemStack {
     private void betterDurability$handleDeployerBreak(
             int damage,
             LivingEntity entity,
-            Consumer<Item> onBreak,
+            Consumer<LivingEntity> onBreak,
             CallbackInfo ci
     ) {
         ItemStack self = (ItemStack) (Object) this;
@@ -42,7 +41,7 @@ public abstract class MixinItemStack implements UnbreakableItemStack {
         }
 
         if (DeployerToolPolicy.destroysWhenBroken(self)) {
-            onBreak.accept(self.getItem());
+            onBreak.accept(entity);
             self.shrink(1);
             ci.cancel();
         }
