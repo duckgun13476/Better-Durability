@@ -2,10 +2,13 @@
 
 #### v1.3.9 — Beta
 
-- Added configurable Create Deployer tool consumption. Wooden, stone, and iron vanilla tools are consumed by default when exhausted; the list can be changed in the server configuration.
-- Tools outside that list, including diamond tools, retain their normal broken state in a Create Deployer, causing the Deployer to stop instead of silently restoring usable durability.
-- Applied the same Create Deployer behavior to Forge 1.19.2, Forge 1.20.1, and NeoForge 1.21.1.
+This beta release targets Forge 1.19.2, Forge 1.20.1, and NeoForge 1.21.1.
+
+- Added configurable broken-tool handling for Create Deployers. Wooden, stone, and iron vanilla tools are consumed by default when exhausted; server owners can change the list in the gameplay configuration.
+- Broken tools outside the consumption list, including diamond and higher-tier tools, remain inside the Deployer and stop it from performing further actions until the tool is repaired or removed.
+- Fixed Create Deployers continuing to operate after a retained tool entered its broken state.
 - Fixed a Forge 1.20.1 crash when a disposable tool reached its breaking point inside a Create Deployer.
+- Standardized and regression-tested the Create Deployer behavior across all three supported versions.
 - Fixed a client HUD crash reported by JIANG_XU when broken armor could reduce the effective armor value below zero.
 
 #### v1.19.2-1.1.0 / v1.20.1-1.0.0 / v1.21.1-1.3.8 — Beta
