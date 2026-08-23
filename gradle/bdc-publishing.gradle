@@ -572,30 +572,49 @@ ext.bdcUploadCurseForgeFile = {
     File artifactFile = bdcVerifyPublishArtifactFile()
     String endpoint = bdcReadCurseForgeUploadEndpoint()
     String uploadUrl = "${endpoint}/api/projects/${bdcUrlEncode(curseforge_id.toString())}/upload-file"
-    String boundary = "bo-cf-${System.currentTimeMillis()}-${Math.abs(new Random().nextInt())}"
-    HttpURLConnection connection = (HttpURLConnection) URI.create(uploadUrl).toURL().openConnection()
-    connection.setRequestMethod('POST')
-    connection.setConnectTimeout(bdcPublishHttpTimeoutMillis())
-    connection.setReadTimeout(Math.max(bdcPublishHttpTimeoutMillis(), 180000))
-    connection.setDoOutput(true)
-    connection.setRequestProperty('X-Api-Token', token.trim())
-    connection.setRequestProperty('User-Agent', bdcPublishUserAgent())
-    connection.setRequestProperty('Content-Type', "multipart/form-data; boundary=${boundary}")
+    int maxHandshakeAttempts = Math.max(1, (project.findProperty('bdc_publish_curseforge_handshake_attempts')?.toString()?.toInteger() ?: 3))
+    for (int attempt = 1; attempt <= maxHandshakeAttempts; attempt++) {
+        String boundary = "bdc-cf-${System.currentTimeMillis()}-${Math.abs(new Random().nextInt())}"
+        HttpURLConnection connection = (HttpURLConnection) URI.create(uploadUrl).toURL().openConnection()
+        connection.setRequestMethod('POST')
+        connection.setConnectTimeout(bdcPublishHttpTimeoutMillis())
+        connection.setReadTimeout(Math.max(bdcPublishHttpTimeoutMillis(), 180000))
+        connection.setDoOutput(true)
+        connection.setRequestProperty('X-Api-Token', token.trim())
+        connection.setRequestProperty('User-Agent', bdcPublishUserAgent())
+        connection.setRequestProperty('Content-Type', "multipart/form-data; boundary=${boundary}")
 
-    connection.outputStream.withCloseable { OutputStream output ->
-        bdcWriteMultipartTextPart(output, boundary, 'metadata', JsonOutput.toJson(bdcReadCurseForgeUploadMetadata()), 'application/json; charset=UTF-8')
-        bdcWriteMultipartFilePart(output, boundary, 'file', artifactFile)
-        output.write("--${boundary}--\r\n".getBytes('UTF-8'))
-    }
+        try {
+            connection.outputStream.withCloseable { OutputStream output ->
+                bdcWriteMultipartTextPart(output, boundary, 'metadata', JsonOutput.toJson(bdcReadCurseForgeUploadMetadata()), 'application/json; charset=UTF-8')
+                bdcWriteMultipartFilePart(output, boundary, 'file', artifactFile)
+                output.write("--${boundary}--\r\n".getBytes('UTF-8'))
+            }
 
-    int responseCode = connection.getResponseCode()
-    InputStream stream = responseCode >= 400 ? connection.getErrorStream() : connection.getInputStream()
-    String body = stream == null ? '' : stream.getText('UTF-8')
-    if (responseCode < 200 || responseCode >= 300) {
-        String bodySummary = body == null ? '' : body.replaceAll(/\s+/, ' ').take(500)
-        throw new GradleException("CurseForge upload failed for ${project.path}: POST ${uploadUrl} returned HTTP ${responseCode}${bodySummary.isEmpty() ? '' : " (${bodySummary})"}")
+            int responseCode = connection.getResponseCode()
+            InputStream stream = responseCode >= 400 ? connection.getErrorStream() : connection.getInputStream()
+            String body = stream == null ? '' : stream.getText('UTF-8')
+            if (responseCode < 200 || responseCode >= 300) {
+                String bodySummary = body == null ? '' : body.replaceAll(/\s+/, ' ').take(500)
+                throw new GradleException("CurseForge upload failed for ${project.path}: POST ${uploadUrl} returned HTTP ${responseCode}${bodySummary.isEmpty() ? '' : " (${bodySummary})"}")
+            }
+            return body.trim().isEmpty() ? [:] : new JsonSlurper().parseText(body)
+        } catch (Throwable error) {
+            boolean handshakeFailure = false
+            for (Throwable cause = error; cause != null; cause = cause.cause) {
+                if (cause instanceof javax.net.ssl.SSLHandshakeException) {
+                    handshakeFailure = true
+                    break
+                }
+            }
+            if (!handshakeFailure || attempt >= maxHandshakeAttempts) throw error
+            logger.warn("CurseForge TLS handshake failed for ${project.path}; retrying upload (${attempt}/${maxHandshakeAttempts}): ${error.message}")
+            Thread.sleep(1500L * attempt)
+        } finally {
+            connection.disconnect()
+        }
     }
-    return body.trim().isEmpty() ? [:] : new JsonSlurper().parseText(body)
+    throw new GradleException("CurseForge upload exhausted TLS handshake retries for ${project.path}")
 }
 
 tasks.register('PublishInfo') {

@@ -26,13 +26,29 @@ def bdcForge1192Build = bdcForge1192Task(
         ['build'])
 
 gradle.projectsEvaluated {
-    Task previous = null
-    bdcPublishableProjects.collect { rootProject.project(it) }.each { target ->
-        ['publishCurseForge', 'publishMods'].each { taskName ->
-            Task current = target.tasks.findByName(taskName)
-            if (current != null && previous != null) current.mustRunAfter(previous)
-            if (current != null) previous = current
+    Task previousCurseForgeTask = null
+    Task previousModrinthTask = null
+
+    bdcPublishableProjects.collect { rootProject.project(it) }.each { targetProject ->
+        Task curseForgeTask = targetProject.tasks.findByName('publishCurseForge')
+        Task modrinthTask = targetProject.tasks.findByName('publishModrinth')
+        Task publishModsTask = targetProject.tasks.findByName('publishMods')
+
+        if (curseForgeTask != null) {
+            if (previousCurseForgeTask != null) curseForgeTask.mustRunAfter(previousCurseForgeTask)
+            if (previousModrinthTask != null) curseForgeTask.mustRunAfter(previousModrinthTask)
         }
+        if (modrinthTask != null) {
+            if (curseForgeTask != null) modrinthTask.mustRunAfter(curseForgeTask)
+            if (previousCurseForgeTask != null) modrinthTask.mustRunAfter(previousCurseForgeTask)
+            if (previousModrinthTask != null) modrinthTask.mustRunAfter(previousModrinthTask)
+        }
+        if (publishModsTask != null && modrinthTask != null) {
+            publishModsTask.mustRunAfter(modrinthTask)
+        }
+
+        if (curseForgeTask != null) previousCurseForgeTask = curseForgeTask
+        if (modrinthTask != null) previousModrinthTask = modrinthTask
     }
 }
 
