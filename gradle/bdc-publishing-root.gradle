@@ -9,7 +9,9 @@ def bdcForge1192Task = { String name, String description, List<String> arguments
         group = 'Publishing'
         this.description = description
         workingDir bdcForge1192Dir
-        commandLine 'cmd', '/c', 'gradlew.bat', *arguments, '--no-daemon', '--no-configuration-cache', '--console=plain'
+        commandLine 'cmd', '/c', 'gradlew.bat', *arguments,
+                '-Dnet.minecraftforge.gradle.check.certs=false',
+                '--no-daemon', '--no-configuration-cache', '--console=plain'
         doFirst {
             def javaHome = bdcForge1192Java.get().metadata.installationPath.asFile.absolutePath
             environment 'JAVA_HOME', javaHome
