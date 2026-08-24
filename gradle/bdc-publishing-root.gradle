@@ -65,6 +65,12 @@ tasks.register('publishInfoAllVersions') {
     dependsOn bdcPublishableProjects.collect { "${it}:publishInfo" }
 }
 
+tasks.register('syncModrinthMetadataAllVersions') {
+    group = 'Publishing'
+    description = 'Sets and verifies Modrinth environment metadata for every published target without uploading files.'
+    dependsOn bdcPublishableProjects.collect { "${it}:syncModrinthVersionEnvironment" }
+}
+
 tasks.register('publishAllVersions') {
     group = 'Publishing'
     description = 'Publishes the supported Forge 1.19.2, Forge 1.20.1, and NeoForge 1.21.1 versions.'

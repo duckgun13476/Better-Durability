@@ -4,7 +4,11 @@ import groovy.json.JsonSlurper
 import java.net.HttpURLConnection
 import java.net.URI
 import java.net.URLEncoder
+import java.net.http.HttpClient
+import java.net.http.HttpRequest
+import java.net.http.HttpResponse
 import java.security.MessageDigest
+import java.time.Duration
 
 // BetterDurabilityCommunity publication chain.
 //
@@ -492,6 +496,74 @@ ext.bdcReadCurseForgeUploadApiToken = {
     return properties?.getProperty('CF_TOKEN')
 }
 
+ext.bdcHttpPatchJson = { String url, Map payload, Map<String, String> headers = [:] ->
+    HttpRequest.Builder request = HttpRequest.newBuilder(URI.create(url))
+            .timeout(Duration.ofMillis(bdcPublishHttpTimeoutMillis()))
+            .header('Accept', 'application/json')
+            .header('Content-Type', 'application/json')
+            .header('User-Agent', bdcPublishUserAgent())
+    headers.each { String key, String value ->
+        if (value != null && !value.trim().isEmpty()) {
+            request.header(key, value)
+        }
+    }
+    request.method('PATCH', HttpRequest.BodyPublishers.ofString(JsonOutput.toJson(payload)))
+    HttpResponse<String> response = HttpClient.newBuilder()
+            .connectTimeout(Duration.ofMillis(bdcPublishHttpTimeoutMillis()))
+            .build()
+            .send(request.build(), HttpResponse.BodyHandlers.ofString())
+    int responseCode = response.statusCode()
+    String body = response.body() ?: ''
+    if (responseCode < 200 || responseCode >= 300) {
+        String bodySummary = body == null ? '' : body.replaceAll(/\s+/, ' ').take(240)
+        throw new GradleException("Publishing metadata update failed for ${project.path}: PATCH ${url} returned HTTP ${responseCode}${bodySummary.isEmpty() ? '' : " (${bodySummary})"}")
+    }
+    return body.trim().isEmpty() ? null : new JsonSlurper().parseText(body)
+}
+
+ext.bdcReadPublishModrinthEnvironment = {
+    String environment = project.findProperty('bdc_publish_modrinth_environment')?.toString()?.trim()
+    if (environment == null || environment.isEmpty()) {
+        throw new GradleException("Missing bdc_publish_modrinth_environment in ${project.path}")
+    }
+    return environment
+}
+
+ext.bdcSyncCurrentModrinthVersionEnvironment = {
+    String token = bdcReadPublishingProperties()?.getProperty('MODRINTH_TOKEN')
+    if (token == null || token.trim().isEmpty()) {
+        throw new GradleException("Missing MODRINTH_TOKEN for metadata update in ${project.path}")
+    }
+
+    Map<String, String> headers = ['Authorization': token.trim()]
+    String versionNumber = bdcReadPublishVersionId()
+    String lookupUrl = "https://api.modrinth.com/v2/project/${bdcUrlEncode(modrinth_id.toString())}/version/${bdcUrlEncode(versionNumber)}"
+    def version = bdcHttpGetJson(lookupUrl, headers, false)
+    if (!(version instanceof Map) || version.id == null) {
+        throw new GradleException("Modrinth did not return a version id for ${project.path}: ${versionNumber}")
+    }
+
+    String environment = bdcReadPublishModrinthEnvironment()
+    bdcHttpPatchJson(
+            "https://api.modrinth.com/v3/version/${bdcUrlEncode(version.id.toString())}",
+            [environment: environment],
+            headers)
+    def verified = null
+    for (int attempt = 1; attempt <= 5; attempt++) {
+        verified = bdcHttpGetJson("https://api.modrinth.com/v3/version/${bdcUrlEncode(version.id.toString())}", headers, false)
+        if (verified?.environment?.toString() == environment) {
+            break
+        }
+        if (attempt < 5) {
+            Thread.sleep(2000L)
+        }
+    }
+    if (verified?.environment?.toString() != environment) {
+        throw new GradleException("Modrinth environment verification failed after retries for ${project.path}: expected=${environment}, actual=${verified?.environment}")
+    }
+    println "Verified Modrinth environment for ${project.path}: version=${versionNumber} environment=${environment}"
+}
+
 ext.bdcReadCurseForgeUploadEndpoint = {
     return project.findProperty('bdc_publish_curseforge_upload_endpoint')?.toString()?.trim() ?: 'https://authors-old.curseforge.com'
 }
@@ -752,6 +824,15 @@ tasks.register('publishCurseForge') {
     }
 }
 
+tasks.register('syncModrinthVersionEnvironment') {
+    group = 'Publishing'
+    description = 'Sets and verifies the current Modrinth version environment metadata without uploading a file.'
+
+    doLast {
+        bdcSyncCurrentModrinthVersionEnvironment()
+    }
+}
+
 publishMods {
     def properties = bdcReadPublishingProperties()
     def modrinthTokenGet = properties?.getProperty('MODRINTH_TOKEN')
@@ -796,5 +877,9 @@ tasks.matching { it.name in ['publishMods', 'publishModrinth'] }.configureEach {
             return false
         }
         return true
+    }
+
+    if (it.name == 'publishMods') {
+        finalizedBy 'syncModrinthVersionEnvironment'
     }
 }

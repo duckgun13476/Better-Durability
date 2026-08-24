@@ -4,7 +4,12 @@
 
 ## Notice
 
-* This project currently provides builds for **Forge 1.20.1** and **NeoForge 1.21.1**.
+* This project currently provides builds for **Forge 1.19.2**, **Forge 1.20.1**, and **NeoForge 1.21.1**.
+* Install the mod on both the client and server. Server-side code enforces broken-item behavior, while client-side code provides its names, tooltips, and presentation.
+
+## Project origin
+
+BetterDurabilityCommunity is a community-maintained fork of [Better Durability](https://github.com/Darkorg69/Better-Durability) by Darkorg69. It preserves and extends the original MIT-licensed code and assets, with continued attribution in [LICENCE](LICENCE).
 
 ## What does this mod do?
 

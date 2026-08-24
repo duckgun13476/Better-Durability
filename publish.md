@@ -51,6 +51,17 @@ The current community-maintained release targets **Forge 1.19.2**, **Forge
 The mod ID remains `betterdurability` for configuration and world
 compatibility with existing installations.
 
+The project is designed for installation on both the client and server. The
+server enforces broken-item gameplay behavior, while the client provides the
+corresponding names, tooltips, and presentation.
+
+## Project Origin
+
+BetterDurabilityCommunity is a community-maintained fork of
+[Better Durability](https://github.com/Darkorg69/Better-Durability) by
+Darkorg69. It preserves and extends the original MIT-licensed code and assets,
+with continued attribution provided in the included license.
+
 ## Configuration
 
 Gameplay settings are server-side. Use the generated
