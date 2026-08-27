@@ -1,5 +1,12 @@
 # Changelog
 
+#### v1.3.10 — Beta
+
+This beta release targets Forge 1.19.2, Forge 1.20.1, and NeoForge 1.21.1.
+
+- Fixed Frost Walker continuing to freeze water while the enchanted boots were broken.
+- Broken Frost Walker boots now retain the enchantment but no longer apply its movement effect until repaired.
+
 #### v1.3.9 — Beta
 
 This beta release targets Forge 1.19.2, Forge 1.20.1, and NeoForge 1.21.1.
