@@ -7,6 +7,7 @@ import net.minecraft.core.registries.Registries;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.enchantment.EnchantedItemInUse;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentTarget;
@@ -18,6 +19,19 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Enchantment.class)
 public class EnchantmentMixin {
+    @Inject(method = "runLocationChangedEffects(Lnet/minecraft/server/level/ServerLevel;ILnet/minecraft/world/item/enchantment/EnchantedItemInUse;Lnet/minecraft/world/entity/LivingEntity;)V",
+            cancellable = true, at = @At("HEAD"))
+    private void modifyFrostWalkerCheck$discardEffect(ServerLevel level, int enchantmentLevel,
+                                                      EnchantedItemInUse item, LivingEntity entity,
+                                                      CallbackInfo ci) {
+        Registry<Enchantment> registry = level.registryAccess().registryOrThrow(Registries.ENCHANTMENT);
+        Holder.Reference<Enchantment> frostWalker = registry.getHolderOrThrow(Enchantments.FROST_WALKER);
+        if (frostWalker.value() == (Object) this
+                && !ItemUsage.check(item.itemStack(), ItemUsage.Type.BOOTS_FROST_WALKER)) {
+            ci.cancel();
+        }
+    }
+
     @Inject(method = "doPostAttack(Lnet/minecraft/server/level/ServerLevel;ILnet/minecraft/world/item/enchantment/EnchantedItemInUse;Lnet/minecraft/world/item/enchantment/EnchantmentTarget;Lnet/minecraft/world/entity/Entity;Lnet/minecraft/world/damagesource/DamageSource;)V",
             cancellable = true, at = @At("HEAD"))
     private void modifyThornsCheck$discardEffect(ServerLevel level, int enchantmentLevel, EnchantedItemInUse item,

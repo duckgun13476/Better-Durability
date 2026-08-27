@@ -67,6 +67,7 @@ public class ItemDurabilityEvent extends Event {
             ARMOR_ENEMY_ATTACK,
             ARMOR_THORNS,
             HELMET_HEAD_STRUCK,
+            BOOTS_FROST_WALKER,
             BOOTS_SOULSPEED,
             SHIELD_DEFEND
         }
