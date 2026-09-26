@@ -1,6 +1,7 @@
 package PinkCats.betterdurability.event;
 
 import PinkCats.betterdurability.BetterDurability;
+import PinkCats.betterdurability.durability.DeployerToolPolicy;
 import PinkCats.betterdurability.util.VanillaDamageableType;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -22,6 +23,11 @@ public class ForgeClientEventsHandler {
             for (int index = 1; index <= enchantmentLines; index++) {
                 tooltip.set(index, tooltip.get(index).copy().withStyle(ChatFormatting.RED));
             }
+        }
+
+        if (DeployerToolPolicy.destroysWhenBroken(event.getItemStack())) {
+            tooltip.add(Component.translatable("tooltip.betterdurability.deployer_consumable")
+                    .withStyle(ChatFormatting.RED));
         }
     }
 }

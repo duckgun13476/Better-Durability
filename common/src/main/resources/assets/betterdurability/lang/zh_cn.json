@@ -1,4 +1,5 @@
 {
   "tooltip.betterdurability.broken": "损坏",
-  "tooltip.betterdurability.broken_suffix": "（已损坏）"
+  "tooltip.betterdurability.broken_suffix": "（已损坏）",
+  "tooltip.betterdurability.deployer_consumable": "此物品在机械手中损坏后会消失"
 }

@@ -1,4 +1,5 @@
 {
   "tooltip.betterdurability.broken": "Broken",
-  "tooltip.betterdurability.broken_suffix": "(Broken)"
+  "tooltip.betterdurability.broken_suffix": "(Broken)",
+  "tooltip.betterdurability.deployer_consumable": "This item will disappear when it breaks in a Deployer"
 }

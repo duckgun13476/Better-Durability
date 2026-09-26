@@ -1,6 +1,7 @@
 package darkorg.betterdurability.event;
 
 import darkorg.betterdurability.BetterDurability;
+import darkorg.betterdurability.util.DeployerToolPolicy;
 import darkorg.betterdurability.util.StackUtil;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -22,6 +23,11 @@ public class ForgeClientEvents {
             for (int index = 1; index <= enchantmentLines; index++) {
                 tooltip.set(index, tooltip.get(index).copy().withStyle(ChatFormatting.RED));
             }
+        }
+
+        if (DeployerToolPolicy.destroysWhenBroken(event.getItemStack())) {
+            tooltip.add(Component.translatable("tooltip.betterdurability.deployer_consumable")
+                    .withStyle(ChatFormatting.RED));
         }
     }
 }

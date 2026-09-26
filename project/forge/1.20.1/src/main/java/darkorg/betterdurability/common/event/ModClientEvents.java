@@ -1,5 +1,6 @@
 package darkorg.betterdurability.common.event;
 
+import darkorg.betterdurability.common.impl.DeployerToolPolicy;
 import darkorg.betterdurability.common.impl.ModItemStack;
 import net.minecraft.ChatFormatting;
 import net.minecraft.network.chat.Component;
@@ -20,6 +21,11 @@ public abstract class ModClientEvents {
                 for (int index = 1; index <= enchantmentLines; index++) {
                     pComponents.set(index, pComponents.get(index).copy().withStyle(ChatFormatting.RED));
                 }
+            }
+
+            if (DeployerToolPolicy.destroysWhenBroken(pItemStack)) {
+                pComponents.add(Component.translatable("tooltip.betterdurability.deployer_consumable")
+                        .withStyle(ChatFormatting.RED));
             }
         }
     }
