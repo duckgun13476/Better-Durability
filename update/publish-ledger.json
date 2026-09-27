@@ -84,6 +84,76 @@
             "source": "direct-curseforge-upload",
             "confirmedAt": "2026-08-23T20:09:16+08:00",
             "fileId": 8714341
+        },
+        {
+            "platform": "curseforge",
+            "projectId": "1655072",
+            "minecraftVersion": "1.16.5",
+            "loader": "forge",
+            "versionId": "1.16.5-1.3.11-forge",
+            "displayName": "BetterDurabilityCommunity_v1.3.11_for_MC_1.16.5_forge",
+            "artifactFileName": "betterdurability-1.16.5-1.3.11.jar",
+            "artifactSha256": "25915f186bbdf8b600ba042ff3412cd709bf050c88faab7b787fc533a81ec292",
+            "status": "success",
+            "source": "direct-curseforge-upload",
+            "confirmedAt": "2026-09-27T15:42:00+10:00",
+            "fileId": 8987539
+        },
+        {
+            "platform": "curseforge",
+            "projectId": "1655072",
+            "minecraftVersion": "1.18.2",
+            "loader": "forge",
+            "versionId": "1.18.2-1.3.11-forge",
+            "displayName": "BetterDurabilityCommunity_v1.3.11_for_MC_1.18.2_forge",
+            "artifactFileName": "betterdurability-1.18.2-1.3.11.jar",
+            "artifactSha256": "e6d26f0db4cbdabeb7ddc41d0952b63734e77b45f3b2a49fdb785dfdcf0708ff",
+            "status": "success",
+            "source": "direct-curseforge-upload",
+            "confirmedAt": "2026-09-27T15:42:04+10:00",
+            "fileId": 8987540
+        },
+        {
+            "platform": "curseforge",
+            "projectId": "1655072",
+            "minecraftVersion": "1.19.2",
+            "loader": "forge",
+            "versionId": "1.19.2-1.3.11-forge",
+            "displayName": "BetterDurabilityCommunity_v1.3.11_for_MC_1.19.2_forge",
+            "artifactFileName": "betterdurability-1.3.11-forge-1.19.2.jar",
+            "artifactSha256": "114dd690513c398f189b6ca94ca2a1979b0a48e84b730e2df5177635f3d2d918",
+            "status": "success",
+            "source": "direct-curseforge-upload",
+            "confirmedAt": "2026-09-27T15:42:08+10:00",
+            "fileId": 8987541
+        },
+        {
+            "platform": "curseforge",
+            "projectId": "1655072",
+            "minecraftVersion": "1.20.1",
+            "loader": "forge",
+            "versionId": "1.20.1-1.3.11-forge",
+            "displayName": "BetterDurabilityCommunity_v1.3.11_for_MC_1.20.1_forge",
+            "artifactFileName": "betterdurability-1.3.11-forge-1.20.1.jar",
+            "artifactSha256": "709a2827a30f1f15721bcca8425f63c223a454ba158832f32f18b7db776c0ef9",
+            "status": "success",
+            "source": "direct-curseforge-upload",
+            "confirmedAt": "2026-09-27T15:42:11+10:00",
+            "fileId": 8987542
+        },
+        {
+            "platform": "curseforge",
+            "projectId": "1655072",
+            "minecraftVersion": "1.21.1",
+            "loader": "neoforge",
+            "versionId": "1.21.1-1.3.11-neoforge",
+            "displayName": "BetterDurabilityCommunity_v1.3.11_for_MC_1.21.1_neoforge",
+            "artifactFileName": "betterdurability-1.3.11-neoforge-1.21.1.jar",
+            "artifactSha256": "b028ca58de0a67c873387faf9c04684bc1f0e9873c8d10ad414af8a93ef77e6f",
+            "status": "success",
+            "source": "direct-curseforge-upload",
+            "confirmedAt": "2026-09-27T15:42:15+10:00",
+            "fileId": 8987543
         }
     ]
 }
