@@ -10,9 +10,9 @@ BetterDurabilityCommunity is now available for:
 - **Forge 1.20.1**
 - **NeoForge 1.21.1**
 
-This release restores and verifies the broken-item system across all three
-published targets. Supported equipment is preserved at its broken durability
-threshold instead of disappearing.
+This release provides the broken-item system across five maintained targets.
+Supported equipment is preserved at its broken durability threshold instead
+of disappearing.
 
 ### Changes
 
@@ -21,6 +21,11 @@ threshold instead of disappearing.
 - Broken tools and weapons lose their normal attribute bonuses.
 - Enchantments are retained; their tooltip entries turn red while the item is
   broken.
+- Broken Frost Walker boots no longer freeze water until repaired.
+- Configured Create Deployer consumables disappear when exhausted, while
+  protected tools remain broken and stop the machine.
+- The default Deployer consumables include wooden, stone, and iron tools plus
+  all five Applied Energistics 2 Fluix tools on supported versions.
 - The Forge 1.19.2 build now includes the same broken-item presentation,
   armor handling, attribute removal, and durability protection as the modern
   releases.
@@ -44,6 +49,8 @@ enchantments while preventing it from being used as if it were intact.
   Speed, and binding equipment.
 - Includes compatibility for Create Deployers and belt deployers, so automation
   follows the same broken-tool rules as normal player interaction.
+- Warns players when a tool is configured to disappear after a Create Deployer
+  exhausts it.
 
 ## Compatibility
 
