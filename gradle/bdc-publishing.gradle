@@ -581,6 +581,8 @@ ext.bdcReadCurseForgeUploadEndpoint = {
 ext.bdcReadCurseForgeUploadVersionIds = {
     // The legacy upload endpoint expects gameVersionId values, not Core API ids.
     Map<String, Long> minecraftVersionIds = [
+            '1.16.5': 8203L,
+            '1.18.2': 9008L,
             '1.19.2': 9366L,
             '1.20.1': 9990L,
             '1.21.1': 11779L,

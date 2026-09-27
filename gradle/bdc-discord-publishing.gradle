@@ -49,4 +49,3 @@ tasks.register('publishDiscordRelease') {
 tasks.named('publishDiscordRelease').configure {
     mustRunAfter ':forge-1.20.1:publishAll', ':neoforge-1.21.1:publishAll'
 }
-tasks.named('publishAllVersions').configure { dependsOn 'publishDiscordRelease' }
