@@ -1,5 +1,14 @@
 # Changelog
 
+#### v1.3.11 / Forge 1.18.2 v1.1.1 — Beta
+
+This beta release targets Forge 1.18.2, Forge 1.19.2, Forge 1.20.1, and NeoForge 1.21.1.
+
+- Added all five Applied Energistics 2 Fluix tools to the default Create Deployer consumption list: sword, shovel, pickaxe, axe, and hoe.
+- Existing configurations that still match the previous default list automatically receive the new Fluix-tool defaults; customized lists remain unchanged.
+- Added the configurable Create Deployer broken-tool policy and matching tooltip warning to Forge 1.18.2.
+- Fluix tools now disappear when exhausted by a Create Deployer, while unlisted higher-tier tools remain broken and stop the machine.
+
 #### v1.3.10 — Beta
 
 This beta release targets Forge 1.19.2, Forge 1.20.1, and NeoForge 1.21.1.

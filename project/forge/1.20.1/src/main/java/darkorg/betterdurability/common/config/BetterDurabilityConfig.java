@@ -12,6 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BetterDurabilityConfig {
+    private static final String LEGACY_DEFAULT_DEPLOYER_CONSUMABLE_ITEMS = "minecraft:wooden_sword,minecraft:wooden_shovel,minecraft:wooden_pickaxe,minecraft:wooden_axe,minecraft:wooden_hoe,minecraft:stone_sword,minecraft:stone_shovel,minecraft:stone_pickaxe,minecraft:stone_axe,minecraft:stone_hoe,minecraft:iron_sword,minecraft:iron_shovel,minecraft:iron_pickaxe,minecraft:iron_axe,minecraft:iron_hoe";
+    private static final String DEFAULT_DEPLOYER_CONSUMABLE_ITEMS = LEGACY_DEFAULT_DEPLOYER_CONSUMABLE_ITEMS + ",ae2:fluix_sword,ae2:fluix_shovel,ae2:fluix_pickaxe,ae2:fluix_axe,ae2:fluix_hoe";
+    private static final List<String> AE2_FLUIX_TOOL_IDS = List.of(
+            "ae2:fluix_sword", "ae2:fluix_shovel", "ae2:fluix_pickaxe", "ae2:fluix_axe", "ae2:fluix_hoe"
+    );
     public static final Gameplay GAMEPLAY;
     public static final ForgeConfigSpec GAMEPLAY_SPEC;
     public static final String GAMEPLAY_CONFIG_FILE_NAME = BetterDurability.MOD_ID + "-gameplay.toml";
@@ -52,7 +57,7 @@ public abstract class BetterDurabilityConfig {
             deployerConsumableItems = pBuilder
                     .comment("Create Deployer tools that disappear when exhausted.")
                     .comment("All other Deployer tools remain broken and stop the machine. Use item IDs separated by commas.")
-                    .define("deployerConsumableItems", "minecraft:wooden_sword,minecraft:wooden_shovel,minecraft:wooden_pickaxe,minecraft:wooden_axe,minecraft:wooden_hoe,minecraft:stone_sword,minecraft:stone_shovel,minecraft:stone_pickaxe,minecraft:stone_axe,minecraft:stone_hoe,minecraft:iron_sword,minecraft:iron_shovel,minecraft:iron_pickaxe,minecraft:iron_axe,minecraft:iron_hoe");
+                    .define("deployerConsumableItems", DEFAULT_DEPLOYER_CONSUMABLE_ITEMS);
             pBuilder.pop();
         }
     }
@@ -67,6 +72,11 @@ public abstract class BetterDurabilityConfig {
     }
 
     public static boolean isDeployerConsumable(Item pItem) {
+        String configuredIds = BetterDurabilityConfig.GAMEPLAY.deployerConsumableItems.get().replaceAll("\\s+", "");
+        String itemId = BuiltInRegistries.ITEM.getKey(pItem).toString();
+        if (configuredIds.equals(LEGACY_DEFAULT_DEPLOYER_CONSUMABLE_ITEMS) && AE2_FLUIX_TOOL_IDS.contains(itemId)) {
+            return true;
+        }
         return BetterDurabilityConfig.parseItemListConfig(BetterDurabilityConfig.GAMEPLAY.deployerConsumableItems).contains(pItem);
     }
 

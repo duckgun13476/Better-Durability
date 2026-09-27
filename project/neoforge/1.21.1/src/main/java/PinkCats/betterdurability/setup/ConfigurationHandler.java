@@ -19,6 +19,17 @@ import java.util.Set;
 
 @EventBusSubscriber(modid = BetterDurability.MOD_ID, bus = EventBusSubscriber.Bus.MOD)
 public class ConfigurationHandler {
+    public static final List<String> LEGACY_DEFAULT_DEPLOYER_CONSUMABLE_ITEM_IDS = List.of(
+            "minecraft:wooden_sword", "minecraft:wooden_shovel", "minecraft:wooden_pickaxe", "minecraft:wooden_axe", "minecraft:wooden_hoe",
+            "minecraft:stone_sword", "minecraft:stone_shovel", "minecraft:stone_pickaxe", "minecraft:stone_axe", "minecraft:stone_hoe",
+            "minecraft:iron_sword", "minecraft:iron_shovel", "minecraft:iron_pickaxe", "minecraft:iron_axe", "minecraft:iron_hoe"
+    );
+    public static final List<String> DEFAULT_DEPLOYER_CONSUMABLE_ITEM_IDS = List.of(
+            "minecraft:wooden_sword", "minecraft:wooden_shovel", "minecraft:wooden_pickaxe", "minecraft:wooden_axe", "minecraft:wooden_hoe",
+            "minecraft:stone_sword", "minecraft:stone_shovel", "minecraft:stone_pickaxe", "minecraft:stone_axe", "minecraft:stone_hoe",
+            "minecraft:iron_sword", "minecraft:iron_shovel", "minecraft:iron_pickaxe", "minecraft:iron_axe", "minecraft:iron_hoe",
+            "ae2:fluix_sword", "ae2:fluix_shovel", "ae2:fluix_pickaxe", "ae2:fluix_axe", "ae2:fluix_hoe"
+    );
     public static ModConfigSpec SERVER_CONFIG;
 
     public static final String CATEGORY_BLACKLISTS = "blacklists";
@@ -54,11 +65,7 @@ public class ConfigurationHandler {
         DEPLOYER_CONSUMABLE_ITEM_IDS = SERVER_BUILDER
                 .comment("Tools that disappear when a Create Deployer exhausts them.")
                 .comment("All other Deployer tools remain broken and stop the machine. Use fully qualified item IDs.")
-                .defineList("consumableItemIds", ImmutableList.of(
-                        "minecraft:wooden_sword", "minecraft:wooden_shovel", "minecraft:wooden_pickaxe", "minecraft:wooden_axe", "minecraft:wooden_hoe",
-                        "minecraft:stone_sword", "minecraft:stone_shovel", "minecraft:stone_pickaxe", "minecraft:stone_axe", "minecraft:stone_hoe",
-                        "minecraft:iron_sword", "minecraft:iron_shovel", "minecraft:iron_pickaxe", "minecraft:iron_axe", "minecraft:iron_hoe"
-                ), obj -> obj instanceof String);
+                .defineList("consumableItemIds", DEFAULT_DEPLOYER_CONSUMABLE_ITEM_IDS, obj -> obj instanceof String);
         SERVER_BUILDER.pop();
 
         SERVER_CONFIG = SERVER_BUILDER.build();

@@ -4,6 +4,7 @@
 
 BetterDurabilityCommunity is now available for:
 
+- **Forge 1.18.2**
 - **Forge 1.19.2**
 - **Forge 1.20.1**
 - **NeoForge 1.21.1**
@@ -45,8 +46,8 @@ enchantments while preventing it from being used as if it were intact.
 
 ## Compatibility
 
-The current community-maintained release targets **Forge 1.19.2**, **Forge
-1.20.1**, and **NeoForge 1.21.1**.
+The current community-maintained release targets **Forge 1.18.2**, **Forge
+1.19.2**, **Forge 1.20.1**, and **NeoForge 1.21.1**.
 
 The mod ID remains `betterdurability` for configuration and world
 compatibility with existing installations.

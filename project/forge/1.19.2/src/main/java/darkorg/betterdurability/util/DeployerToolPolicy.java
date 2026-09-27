@@ -13,6 +13,17 @@ import java.util.List;
  * for this legacy build while still recognizing its fake player at runtime.
  */
 public final class DeployerToolPolicy {
+    private static final List<String> LEGACY_DEFAULT_CONSUMABLE_ITEM_IDS = List.of(
+            "minecraft:wooden_sword", "minecraft:wooden_shovel", "minecraft:wooden_pickaxe", "minecraft:wooden_axe", "minecraft:wooden_hoe",
+            "minecraft:stone_sword", "minecraft:stone_shovel", "minecraft:stone_pickaxe", "minecraft:stone_axe", "minecraft:stone_hoe",
+            "minecraft:iron_sword", "minecraft:iron_shovel", "minecraft:iron_pickaxe", "minecraft:iron_axe", "minecraft:iron_hoe"
+    );
+    private static final List<String> DEFAULT_CONSUMABLE_ITEM_IDS = List.of(
+            "minecraft:wooden_sword", "minecraft:wooden_shovel", "minecraft:wooden_pickaxe", "minecraft:wooden_axe", "minecraft:wooden_hoe",
+            "minecraft:stone_sword", "minecraft:stone_shovel", "minecraft:stone_pickaxe", "minecraft:stone_axe", "minecraft:stone_hoe",
+            "minecraft:iron_sword", "minecraft:iron_shovel", "minecraft:iron_pickaxe", "minecraft:iron_axe", "minecraft:iron_hoe",
+            "ae2:fluix_sword", "ae2:fluix_shovel", "ae2:fluix_pickaxe", "ae2:fluix_axe", "ae2:fluix_hoe"
+    );
     private static final String DEPLOYER_FAKE_PLAYER =
             "com.simibubi.create.content.kinetics.deployer.DeployerFakePlayer";
     public static final ForgeConfigSpec SERVER_CONFIG;
@@ -39,7 +50,11 @@ public final class DeployerToolPolicy {
     /** Configured tools are deliberately consumable in a Create Deployer. */
     public static boolean destroysWhenBroken(ItemStack stack) {
         Item item = stack.getItem();
-        return CONSUMABLE_ITEM_IDS.get().contains(item.builtInRegistryHolder().key().location().toString());
+        List<? extends String> configuredIds = CONSUMABLE_ITEM_IDS.get();
+        List<? extends String> effectiveIds = configuredIds.equals(LEGACY_DEFAULT_CONSUMABLE_ITEM_IDS)
+                ? DEFAULT_CONSUMABLE_ITEM_IDS
+                : configuredIds;
+        return effectiveIds.contains(item.builtInRegistryHolder().key().location().toString());
     }
 
     /** The warning is relevant only when Create can actually consume the item. */
@@ -52,10 +67,6 @@ public final class DeployerToolPolicy {
     }
 
     private static List<String> defaultConsumableItemIds() {
-        return List.of(
-                "minecraft:wooden_sword", "minecraft:wooden_shovel", "minecraft:wooden_pickaxe", "minecraft:wooden_axe", "minecraft:wooden_hoe",
-                "minecraft:stone_sword", "minecraft:stone_shovel", "minecraft:stone_pickaxe", "minecraft:stone_axe", "minecraft:stone_hoe",
-                "minecraft:iron_sword", "minecraft:iron_shovel", "minecraft:iron_pickaxe", "minecraft:iron_axe", "minecraft:iron_hoe"
-        );
+        return DEFAULT_CONSUMABLE_ITEM_IDS;
     }
 }

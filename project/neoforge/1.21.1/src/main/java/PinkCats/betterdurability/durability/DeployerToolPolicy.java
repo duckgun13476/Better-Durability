@@ -5,6 +5,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
 import net.neoforged.fml.ModList;
 
+import java.util.List;
+
 /** Create Deployer-only tool consumption policy. */
 public final class DeployerToolPolicy {
     private static final String DEPLOYER_FAKE_PLAYER =
@@ -19,7 +21,11 @@ public final class DeployerToolPolicy {
 
     /** Configured tools are deliberately consumable in a Create Deployer. */
     public static boolean destroysWhenBroken(ItemStack stack) {
-        return ConfigurationHandler.DEPLOYER_CONSUMABLE_ITEM_IDS.get()
+        List<? extends String> configuredIds = ConfigurationHandler.DEPLOYER_CONSUMABLE_ITEM_IDS.get();
+        List<? extends String> effectiveIds = configuredIds.equals(ConfigurationHandler.LEGACY_DEFAULT_DEPLOYER_CONSUMABLE_ITEM_IDS)
+                ? ConfigurationHandler.DEFAULT_DEPLOYER_CONSUMABLE_ITEM_IDS
+                : configuredIds;
+        return effectiveIds
                 .contains(stack.getItem().builtInRegistryHolder().key().location().toString());
     }
 
