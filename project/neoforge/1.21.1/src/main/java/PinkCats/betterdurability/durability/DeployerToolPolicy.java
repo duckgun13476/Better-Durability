@@ -21,6 +21,10 @@ public final class DeployerToolPolicy {
 
     /** Configured tools are deliberately consumable in a Create Deployer. */
     public static boolean destroysWhenBroken(ItemStack stack) {
+        if (ConfigurationHandler.PROTECT_ENCHANTED_ITEMS.get() && stack.isEnchanted()) {
+            return false;
+        }
+
         List<? extends String> configuredIds = ConfigurationHandler.DEPLOYER_CONSUMABLE_ITEM_IDS.get();
         List<? extends String> effectiveIds = configuredIds.equals(ConfigurationHandler.LEGACY_DEFAULT_DEPLOYER_CONSUMABLE_ITEM_IDS)
                 ? ConfigurationHandler.DEFAULT_DEPLOYER_CONSUMABLE_ITEM_IDS

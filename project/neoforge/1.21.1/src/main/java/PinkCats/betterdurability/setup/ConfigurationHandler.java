@@ -40,6 +40,7 @@ public class ConfigurationHandler {
     public static final ModConfigSpec.ConfigValue<List<? extends String>> BLACKLISTED_ITEM_IDS;
     public static final ModConfigSpec.ConfigValue<List<? extends String>> WHITELISTED_ITEM_IDS;
     public static final ModConfigSpec.ConfigValue<List<? extends String>> DEPLOYER_CONSUMABLE_ITEM_IDS;
+    public static final ModConfigSpec.BooleanValue PROTECT_ENCHANTED_ITEMS;
     public static final Set<Item> BLACKLISTED_ITEMS = new HashSet<>();
     public static final Set<Item> WHITELISTED_ITEMS = new HashSet<>();
 
@@ -66,6 +67,10 @@ public class ConfigurationHandler {
                 .comment("Tools that disappear when a Create Deployer exhausts them.")
                 .comment("All other Deployer tools remain broken and stop the machine. Use fully qualified item IDs.")
                 .defineList("consumableItemIds", DEFAULT_DEPLOYER_CONSUMABLE_ITEM_IDS, obj -> obj instanceof String);
+        PROTECT_ENCHANTED_ITEMS = SERVER_BUILDER
+                .comment("Protect enchanted tools even when they are listed as Deployer consumables.")
+                .comment("Protected enchanted tools remain broken and stop the machine.")
+                .define("protectEnchantedItems", true);
         SERVER_BUILDER.pop();
 
         SERVER_CONFIG = SERVER_BUILDER.build();

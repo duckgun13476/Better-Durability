@@ -19,6 +19,10 @@ public final class DeployerToolPolicy {
 
     /** Configured tools are deliberately consumable in a Create Deployer. */
     public static boolean destroysWhenBroken(ItemStack stack) {
+        if (BetterDurabilityConfig.GAMEPLAY.protectEnchantedItems.get() && stack.isEnchanted()) {
+            return false;
+        }
+
         return BetterDurabilityConfig.isDeployerConsumable(stack.getItem());
     }
 

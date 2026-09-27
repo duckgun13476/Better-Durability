@@ -41,10 +41,12 @@ required dependency.
   valuable equipment for repair.
 - The default consumable list contains wooden, stone, and iron tools plus all
   five Applied Energistics 2 Fluix tools.
+- Enchanted tools are protected by default even when they are in the consumable
+  list. Disable `protectEnchantedItems` to let Deployers consume them normally.
 - Existing installations that still use the previous default list receive the
   new Fluix defaults automatically; customized lists remain unchanged.
-- When Create is installed, consumable tools display a red warning explaining
-  that they will disappear if exhausted by a Deployer.
+- When Create is installed, tools that can actually be consumed display a red
+  warning explaining that they will disappear if exhausted by a Deployer.
 
 The configurable Deployer policy is available on Forge 1.18.2, Forge 1.19.2,
 Forge 1.20.1, and NeoForge 1.21.1.

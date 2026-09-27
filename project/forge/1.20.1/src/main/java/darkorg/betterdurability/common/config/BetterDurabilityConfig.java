@@ -32,6 +32,7 @@ public abstract class BetterDurabilityConfig {
         public final ConfigValue<Double> defaultItemBrokenDestroySpeed;
         public final ConfigValue<String> blacklist;
         public final ConfigValue<String> deployerConsumableItems;
+        public final ForgeConfigSpec.BooleanValue protectEnchantedItems;
 
         Gameplay(ForgeConfigSpec.Builder pBuilder) {
             pBuilder.comment("Settings related to gameplay").push("gameplay");
@@ -58,6 +59,11 @@ public abstract class BetterDurabilityConfig {
                     .comment("Create Deployer tools that disappear when exhausted.")
                     .comment("All other Deployer tools remain broken and stop the machine. Use item IDs separated by commas.")
                     .define("deployerConsumableItems", DEFAULT_DEPLOYER_CONSUMABLE_ITEMS);
+
+            protectEnchantedItems = pBuilder
+                    .comment("Protect enchanted tools even when they are listed as Deployer consumables.")
+                    .comment("Protected enchanted tools remain broken and stop the machine.")
+                    .define("protectEnchantedItems", true);
             pBuilder.pop();
         }
     }

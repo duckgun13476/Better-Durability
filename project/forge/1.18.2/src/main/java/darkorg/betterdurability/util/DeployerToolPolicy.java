@@ -30,6 +30,7 @@ public final class DeployerToolPolicy {
             "com.simibubi.create.content.contraptions.components.deployer.DeployerFakePlayer";
     public static final ForgeConfigSpec SERVER_CONFIG;
     private static final ForgeConfigSpec.ConfigValue<List<? extends String>> CONSUMABLE_ITEM_IDS;
+    private static final ForgeConfigSpec.BooleanValue PROTECT_ENCHANTED_ITEMS;
 
     static {
         ForgeConfigSpec.Builder builder = new ForgeConfigSpec.Builder();
@@ -38,6 +39,10 @@ public final class DeployerToolPolicy {
                 .comment("Tools that disappear when a Create Deployer exhausts them.")
                 .comment("All other Deployer tools remain broken and stop the machine. Use fully qualified item IDs.")
                 .defineList("consumableItemIds", defaultConsumableItemIds(), value -> value instanceof String);
+        PROTECT_ENCHANTED_ITEMS = builder
+                .comment("Protect enchanted tools even when they are listed as Deployer consumables.")
+                .comment("Protected enchanted tools remain broken and stop the machine.")
+                .define("protectEnchantedItems", true);
         builder.pop();
         SERVER_CONFIG = builder.build();
     }
@@ -55,6 +60,10 @@ public final class DeployerToolPolicy {
     }
 
     public static boolean destroysWhenBroken(ItemStack stack) {
+        if (PROTECT_ENCHANTED_ITEMS.get() && stack.isEnchanted()) {
+            return false;
+        }
+
         Item item = stack.getItem();
         List<? extends String> configuredIds = CONSUMABLE_ITEM_IDS.get();
         List<? extends String> effectiveIds = configuredIds.equals(LEGACY_DEFAULT_CONSUMABLE_ITEM_IDS)
