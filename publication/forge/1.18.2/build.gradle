@@ -1,0 +1,16 @@
+plugins {
+    id 'java'
+    id 'me.modmuss50.mod-publish-plugin' version '1.0.0'
+}
+
+apply from: rootProject.file('gradle/load-version-properties.gradle')
+
+group = mod_group_id
+version = mod_version
+base { archivesName = "${mod_id}-publication-descriptor" }
+
+// The actual mod is built by the isolated ForgeGradle 5 project. This module
+// exists only to publish that final artifact through the root Gradle 8 chain.
+tasks.named('jar').configure { enabled = false }
+
+apply from: rootProject.file('gradle/bdc-publishing.gradle')

@@ -174,7 +174,17 @@ ext.bdcReadPublishOptionalDependencies = {
 ext.bdcReadPublishArtifactFile = {
     String artifactProjectDirectory = project.findProperty('bdc_publish_artifact_project_dir')?.toString()?.trim()
     File artifactProject = artifactProjectDirectory ? new File(bdcPublishingRepositoryRootDir, artifactProjectDirectory) : project.projectDir
-    String artifactFileName = "${mod_id}-${mod_version}-${bdcReadPublishLoaderId()}-${minecraft_version}.jar"
+    String configuredPattern = project.findProperty('bdc_publish_artifact_file_pattern')?.toString()?.trim()
+    String artifactFileName = configuredPattern ?: "{mod_id}-{mod_version}-{loader}-{minecraft_version}.jar"
+    [
+            '{mod_id}'           : mod_id.toString(),
+            '{mod_version}'      : mod_version.toString(),
+            '{loader}'           : bdcReadPublishLoaderId(),
+            '{minecraft_version}': minecraft_version.toString()
+    ].each { token, value -> artifactFileName = artifactFileName.replace(token, value) }
+    if (artifactFileName.isEmpty() || artifactFileName.contains('/') || artifactFileName.contains('\\')) {
+        throw new GradleException("Invalid bdc_publish_artifact_file_pattern for ${project.path}: ${artifactFileName}")
+    }
     return new File(artifactProject, "build/libs/${artifactFileName}")
 }
 

@@ -1,28 +1,50 @@
-def bdcPublishableProjects = [':forge-1.19.2', ':forge-1.20.1', ':neoforge-1.21.1']
+def bdcPublishableProjects = [':forge-1.16.5', ':forge-1.18.2', ':forge-1.19.2', ':forge-1.20.1', ':neoforge-1.21.1']
+def bdcForge1165Dir = rootProject.file('project/forge/1.16.5')
+def bdcForge1182Dir = rootProject.file('project/forge/1.18.2')
 def bdcForge1192Dir = rootProject.file('project/forge/1.19.2')
+def bdcForge1165Java = project.services.get(org.gradle.jvm.toolchain.JavaToolchainService).launcherFor { spec ->
+    spec.languageVersion = JavaLanguageVersion.of(8)
+}
+def bdcForge1182Java = project.services.get(org.gradle.jvm.toolchain.JavaToolchainService).launcherFor { spec ->
+    spec.languageVersion = JavaLanguageVersion.of(17)
+}
 def bdcForge1192Java = project.services.get(org.gradle.jvm.toolchain.JavaToolchainService).launcherFor { spec ->
     spec.languageVersion = JavaLanguageVersion.of(17)
 }
 
-def bdcForge1192Task = { String name, String description, List<String> arguments ->
+def bdcLegacyForgeTask = { String name, String description, File projectDirectory, javaLauncher, List<String> arguments ->
     tasks.register(name, Exec) {
         group = 'Publishing'
         this.description = description
-        workingDir bdcForge1192Dir
+        workingDir projectDirectory
         commandLine 'cmd', '/c', 'gradlew.bat', *arguments,
                 '-Dnet.minecraftforge.gradle.check.certs=false',
                 '--no-daemon', '--no-configuration-cache', '--console=plain'
         doFirst {
-            def javaHome = bdcForge1192Java.get().metadata.installationPath.asFile.absolutePath
+            def javaHome = javaLauncher.get().metadata.installationPath.asFile.absolutePath
             environment 'JAVA_HOME', javaHome
             environment 'PATH', "${javaHome}${File.separator}bin${File.pathSeparator}${System.getenv('PATH')}"
         }
     }
 }
 
-def bdcForge1192Build = bdcForge1192Task(
+def bdcForge1165Build = bdcLegacyForgeTask(
+        'forge1165Build',
+        'Builds the standalone Forge 1.16.5 artifact with Java 8 and Gradle 7.4.',
+        bdcForge1165Dir,
+        bdcForge1165Java,
+        ['build'])
+def bdcForge1182Build = bdcLegacyForgeTask(
+        'forge1182Build',
+        'Builds the standalone Forge 1.18.2 artifact with Java 17 and Gradle 7.4.',
+        bdcForge1182Dir,
+        bdcForge1182Java,
+        ['build'])
+def bdcForge1192Build = bdcLegacyForgeTask(
         'forge1192Build',
         'Builds the standalone Forge 1.19.2 artifact with Java 17 and Gradle 7.4.',
+        bdcForge1192Dir,
+        bdcForge1192Java,
         ['build'])
 
 gradle.projectsEvaluated {
@@ -54,7 +76,9 @@ gradle.projectsEvaluated {
 
 tasks.register('packageAllVersions') {
     group = 'Publishing'
-    description = 'Builds and verifies the final Forge 1.19.2, Forge 1.20.1, and NeoForge 1.21.1 artifacts.'
+    description = 'Builds and verifies all five final release artifacts.'
+    dependsOn bdcForge1165Build
+    dependsOn bdcForge1182Build
     dependsOn bdcForge1192Build
     dependsOn bdcPublishableProjects.collect { "${it}:verifyPublishArtifact" }
 }
@@ -73,7 +97,7 @@ tasks.register('syncModrinthMetadataAllVersions') {
 
 tasks.register('publishAllVersions') {
     group = 'Publishing'
-    description = 'Publishes the supported Forge 1.19.2, Forge 1.20.1, and NeoForge 1.21.1 versions.'
+    description = 'Publishes all five supported Forge and NeoForge versions.'
     dependsOn 'packageAllVersions'
     dependsOn bdcPublishableProjects.collect { "${it}:publishAll" }
 }
