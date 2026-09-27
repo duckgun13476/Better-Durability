@@ -25,7 +25,7 @@ public class ForgeClientEventsHandler {
             }
         }
 
-        if (DeployerToolPolicy.destroysWhenBroken(event.getItemStack())) {
+        if (DeployerToolPolicy.shouldShowConsumableWarning(event.getItemStack())) {
             tooltip.add(Component.translatable("tooltip.betterdurability.deployer_consumable")
                     .withStyle(ChatFormatting.RED));
         }

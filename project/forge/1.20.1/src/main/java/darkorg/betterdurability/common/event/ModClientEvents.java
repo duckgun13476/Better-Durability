@@ -23,7 +23,7 @@ public abstract class ModClientEvents {
                 }
             }
 
-            if (DeployerToolPolicy.destroysWhenBroken(pItemStack)) {
+            if (DeployerToolPolicy.shouldShowConsumableWarning(pItemStack)) {
                 pComponents.add(Component.translatable("tooltip.betterdurability.deployer_consumable")
                         .withStyle(ChatFormatting.RED));
             }

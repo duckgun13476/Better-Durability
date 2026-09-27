@@ -3,6 +3,7 @@ package PinkCats.betterdurability.durability;
 import PinkCats.betterdurability.setup.ConfigurationHandler;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.ItemStack;
+import net.neoforged.fml.ModList;
 
 /** Create Deployer-only tool consumption policy. */
 public final class DeployerToolPolicy {
@@ -20,6 +21,11 @@ public final class DeployerToolPolicy {
     public static boolean destroysWhenBroken(ItemStack stack) {
         return ConfigurationHandler.DEPLOYER_CONSUMABLE_ITEM_IDS.get()
                 .contains(stack.getItem().builtInRegistryHolder().key().location().toString());
+    }
+
+    /** The warning is relevant only when Create can actually consume the item. */
+    public static boolean shouldShowConsumableWarning(ItemStack stack) {
+        return ModList.get().isLoaded("create") && destroysWhenBroken(stack);
     }
 
 }
