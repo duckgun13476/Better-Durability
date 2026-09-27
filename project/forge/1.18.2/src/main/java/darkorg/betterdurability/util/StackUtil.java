@@ -77,4 +77,19 @@ public class StackUtil {
     public static boolean isBroken(ItemStack stack) {
         return isInvalidLeftClickBlock(stack) || isInvalidLeftClickEntity(stack) || isInvalidRightClickBlock(stack) || isInvalidRightClickEntity(stack) || isInvalidRightClickItem(stack);
     }
+
+    public static boolean wouldBreak(ItemStack stack, int damage) {
+        int brokenThreshold = getBrokenThreshold(stack);
+        return brokenThreshold > 0 && stack.isDamageableItem()
+                && stack.getMaxDamage() - stack.getDamageValue() - damage <= brokenThreshold;
+    }
+
+    public static int getBrokenThreshold(ItemStack stack) {
+        Item item = stack.getItem();
+        if (ItemUtil.isTool(item) || ItemUtil.isSword(item) || ItemUtil.isTrident(item)) return 2;
+        if (ItemUtil.isCrossbow(item)) return 9;
+        if (ItemUtil.isFishingRod(item)) return 5;
+        if (ItemUtil.isHoe(item) || ItemUtil.isShears(item) || ItemUtil.isFlintAndSteel(item) || ItemUtil.isBow(item)) return 1;
+        return 0;
+    }
 }
