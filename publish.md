@@ -24,6 +24,9 @@ of disappearing.
 - Broken Frost Walker boots no longer freeze water until repaired.
 - Configured Create Deployer consumables disappear when exhausted, while
   protected tools remain broken and stop the machine.
+- Enchanted Deployer tools are protected by default, even when their item IDs
+  are listed as consumables; this behavior can be changed in the gameplay
+  configuration.
 - The default Deployer consumables include wooden, stone, and iron tools plus
   all five Applied Energistics 2 Fluix tools on supported versions.
 - The Forge 1.19.2 build now includes the same broken-item presentation,
@@ -51,6 +54,8 @@ enchantments while preventing it from being used as if it were intact.
   follows the same broken-tool rules as normal player interaction.
 - Warns players when a tool is configured to disappear after a Create Deployer
   exhausts it.
+- Can protect enchanted tools from Create Deployer consumption, including tools
+  that otherwise appear in the consumable list.
 
 ## Compatibility
 

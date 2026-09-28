@@ -1,5 +1,14 @@
 # Changelog
 
+#### v1.3.12 — Beta
+
+This beta release uses version 1.3.12 across Forge 1.16.5, Forge 1.18.2, Forge 1.19.2, Forge 1.20.1, and NeoForge 1.21.1.
+
+- Added the `protectEnchantedItems` Create Deployer setting on supported versions; it is enabled by default.
+- Enchanted tools are now protected even when their item IDs are listed as Deployer consumables: they remain broken and stop the machine instead of disappearing.
+- The consumable warning is hidden for protected enchanted tools and remains visible for unenchanted tools that the Deployer will consume.
+- Verified the new policy in-game on Forge 1.19.2, Forge 1.20.1, and NeoForge 1.21.1; Forge 1.16.5 retains its existing gameplay behavior.
+
 #### v1.3.11 — Beta
 
 This beta release uses version 1.3.11 across Forge 1.16.5, Forge 1.18.2, Forge 1.19.2, Forge 1.20.1, and NeoForge 1.21.1.
