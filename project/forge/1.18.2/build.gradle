@@ -67,9 +67,19 @@ mixin {
     config 'betterdurability.mixins.json'
 }
 
-repositories {
-    flatDir {
-        dirs 'run/devlibs'
+def createRuntimeRequested = gradle.startParameter.taskNames.any { taskName ->
+    def normalizedTaskName = taskName.toLowerCase(Locale.ROOT)
+    normalizedTaskName.contains('runclient') ||
+            normalizedTaskName.contains('prepareruns') ||
+            normalizedTaskName.contains('genintellijruns')
+}
+def createDevJar = file('run/devlibs/create-1.18.2-0.5.1.i.jar')
+
+if (createRuntimeRequested && createDevJar.exists()) {
+    repositories {
+        flatDir {
+            dirs 'run/devlibs'
+        }
     }
 }
 
@@ -77,8 +87,7 @@ dependencies {
     minecraft "net.minecraftforge:forge:${minecraft_version}-${forge_version}"
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 
-    def createDevJar = file('run/devlibs/create-1.18.2-0.5.1.i.jar')
-    if (createDevJar.exists()) {
+    if (createRuntimeRequested && createDevJar.exists()) {
         runtimeOnly fg.deobf('local:create:1.18.2-0.5.1.i')
     }
 }
